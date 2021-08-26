@@ -1,2 +1,2 @@
-# hellow-world
+# hello-world
 ITM 352 Repository
