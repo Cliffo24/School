@@ -3,24 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=>, initial-scale=1.0">
     <title>Clifford</title>
 </head>
 <body>
     <script>
-        var Fullname = "Clifford Leung";
+
+         var Fullname = "Clifford Leung";
         var num_months_since_birthday = 7;
         var approx_age_fractions_of_year = 6; 
         var over_21 = false;
-     
-
-      
         var number_of_kids = 2; 
-        document.write ("I would like to have" + number_of_kids + "kids"); 
-        
+    
+    document.write ("I would like to have" + number_of_kids + "kids");
+
+
         var firstname = "Clifford"; 
         var lastname = "Leung";
         var middlename= "Rick";
          
-       
-        firstname[1].concat(middlename, lastname [1] )
+        let name = firstname.concat(middlename);
+        let full_name = name.concat(lastname);
+
+   
+
+       document.write (full_name); 
+       document.write ("Clifford <br>"  + "Rick<br>" + "Leung<br>");
+        document.write ("<br> C."+ "L.");
+        document.write ("<b> Clifford </b> " +"<i> Rick </i> " + "<Font size = 25> Leung" )
+var subtotal = 50;        
+var taxrate = .04172;
+var total = subtotal + (subtotal* taxrate);
+
+document.write ("The tax on" + firstname + "bill is" + total)
+
+    </script>
+</body>
+</html>
