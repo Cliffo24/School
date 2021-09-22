@@ -7,33 +7,55 @@
     <title>Smartphone Products</title>
     <link rel="stylesheet" href="products-style.css">       
     <style id="localstyle"></style>
+    <header>
 <script>
-    const store_name = "Clifford Leung"
+    //const store_name = "Clifford Leung"
     var hits = 10;
     var spins = 20;
+    var first_name = "Clifford";
+    var last_name = "Leung";
+    var store_name = "<p style=font-size:40pt>" + "<B>" + first_name + "</b><i> " + last_name + "'s Used Smart Phone Store";
     document.write (store_name);
-    document.write(" Hits: " + hits + " spins: " + spins);
+    //document.write(" Hits: " + hits + " spins: " + spins);
 
 </script>
+
+
+
+
 <p> Hits: <span id="hits_span"> 0</span>>
     Spins: <span id="spins_span"> 0</span>>
+    Hit/Spin: <span id="hit_spin_span">0</span>
 </p>
 
+<input id='speedSlider' type='range' min=".1" max="5" step=".1" style="direction: rtl;"
+onchange="localstyle.innerHTML = '.rotate img {animation-duration: ' + speedSlider.value + 's;}';"
+>
+
+
+</header>
 </head>
 
 <body>
-    <h1>Clifford's Used Smart Phone Store</h1>
-    <input id='speedSlider' type='range' min=".1" max="5" step=".1" style="direction: rtl;"
-    onchange="localstyle.innerHTML = '.rotate img {animation-duration: ' + speedSlider.value + 's;}';"
-    >
+   
      
     <div><main>
 
     <section class="item" onmouseover="
         className='item rotate'
-        spins = spins + 1;
+        spins++;
         spins_span.innerHTML = spins;
-        "  onclick="classname='item' ">
+        temp = (hits/spins);
+        hit_spin_span.innerHTML = temp.toFixed (2);
+        " onclick="   
+        hits++;
+        hits_span.innerHTML = hits;
+        temp = (hits/spins);
+        hit_spin_span.innerHTML = temp.toFixed (2);
+        classname='item' "
+        >
+
+
         <h2>HTC</h2>
         <p>&dollar; 40.00,</p>"
         <img src="http://dport96.github.io/ITM352/morea/080.flow-control-II/HTC.jpg" alt="photo"></img>
@@ -66,7 +88,10 @@
        
     </section>
 </main></div>
-<h1>Your One Stop Phone Shop</h1>
+<footer>
 
+
+<h1>Your One Stop Phone Shop</h1>
+</footer>
 </body>
 </html>
