@@ -14,7 +14,7 @@
     var spins = 20;
     var first_name = "Clifford";
     var last_name = "Leung";
-    var store_name = "<p style=font-size:40pt>" + "<B>" + first_name + "</b><i> " + last_name + "'s Used Smart Phone Store";
+    var store_name = "<p style=font-size:40pt>" + "<B>" + first_name + "</b><i> " + last_name + "" + "'s Used Smart Phone Store";
     document.write (store_name);
     //document.write(" Hits: " + hits + " spins: " + spins);
 
@@ -89,9 +89,20 @@ onchange="localstyle.innerHTML = '.rotate img {animation-duration: ' + speedSlid
     </section>
 </main></div>
 <footer>
-
-
+    <script>  var now = new Date();
+     
+  
+    document.write(`
+    <table border="1" style="margin-left: auto; margin-right: auto; text-align: center;">
+    <tbody><tr><th colspan="2"><h1>Your One Stop For Used Phones - ${first_name[0] + '.' + last_name[0] + '.' }'s</h1></th></tr>
+    <tr><td>1.</td><td><br>Copyright @ ${first_name + ' ' + last_name} </td></tr>
+    <tr><td>2.</td><td>${now.getFullYear()}</td></tr>
+    <tr><td>3.</td><td> ${(now.getHours() + 11) % 12 + 1 + ':' + now.getMinutes()} ${(now.getHours() < 12) ? 'AM' : 'PM'} </td></tr>
+    </tbody></table>`)
+</script>
 <h1>Your One Stop Phone Shop</h1>
+
 </footer>
 </body>
+
 </html>
