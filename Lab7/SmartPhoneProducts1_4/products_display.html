@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smartphone Products</title>
+    <link rel="stylesheet" href="products-style.css">       
+    <style id="localstyle"></style>
+    <header>
+
+<script>
+
+</script>
+
+
+<script>
+    //const store_name = "Clifford Leung"
+    var hits = 10;
+    var spins = 20;
+    var first_name = "Clifford";
+    var last_name = "Leung";
+    var store_name = "<p style=font-size:40pt>" + "<B>Lab7:" + first_name + "</b><i> " + last_name + "" + "'s Used Smart Phone Store";
+    document.write (store_name);
+    //document.write(" Hits: " + hits + " spins: " + spins);
+
+</script>
+
+
+
+<p> Hits: <span id="hits_span"> 0</span>>
+    Spins: <span id="spins_span"> 0</span>>
+    Hit/Spin: <span id="hit_spin_span">0</span>
+    You win:<span id="win_span">pending...</span>
+</p>
+
+<input id='speedSlider' type='range' min=".1" max="5" step=".1" style="direction: rtl;"
+onchange="localstyle.innerHTML = '.rotate img {animation-duration: ' + speedSlider.value + 's;}';"
+>
+
+
+</header>
+</head>
+
+<body>
+   
+     
+    <div><main>
+
+    <section class="item" onmouseover="
+        className='item rotate'
+        spins++;
+        spins_span.innerHTML = spins;
+        ratio = (hits/spins);
+        hit_spin_span.innerHTML = ratio.toFixed (2);
+        /*if (ratio <= 0.5) {
+            //over_half = false;
+            win_span.innerHTML = over_half;
+        }else {
+            over_half = true;
+            win_span.innerHTML = over_half;
+        }*/
+        if (ratio > 0.5) {
+            over_half = true;
+        }
+        win_span.innerHTML = over_half;
+
+
+        " onclick="   
+        hits++;
+        hits_span.innerHTML = hits;
+        ratio = (hits/spins);
+        hit_spin_span.innerHTML = ratio.toFixed (2);
+       
+       // Check if the classname includes 'rotate'. If so then stop rotation.
+       if (!this.classname.includes('rotate') == false){
+            spins++;
+            this.className='item rotate';
+        }
+        classname='item' "
+        >
+
+
+        <h2>HTC</h2>
+        <p>&dollar; 40.00,</p>"
+        <img src="http://dport96.github.io/ITM352/morea/080.flow-control-II/HTC.jpg" alt="photo"></img>
+   
+    </section>
+   
+    <section class="item" onmouseover="className='item rotate'" onclick="classname='item' ">
+        <h2>Apple</h2>
+       <p>&dollar;: 75.00,</p> 
+        <img src="http://dport96.github.io/ITM352/morea/080.flow-control-II/iphone-3gs.jpg" alt="photo"></img>
+
+    </section>
+    <section class="item" onmouseover="className='item rotate'" onclick="classname='item' ">
+        <h2>Nokia</h2>
+        <p>&dollar; 35.00,</p>
+        <img src="http://dport96.github.io/ITM352/morea/080.flow-control-II/Nokia.jpg" alt="photo"></img>
+
+    </section>
+    <section class="item" onmouseover="className='item rotate'" onclick="classname='item' ">
+        <h2>Samsung</h2>
+        <p>&dollar; 45.00,</p>
+        <img src="http://dport96.github.io/ITM352/morea/080.flow-control-II/Samsung.jpg" alt="photo"></img>
+
+    </section>
+    <section class="item" onmouseover="className='item rotate'" onclick="classname='item' ">
+        <h2>Blackberry</h2>
+        <p>&dollar; 10.00,</p>
+        <img src="http://dport96.github.io/ITM352/morea/080.flow-control-II/Blackberry.jpg" alt="photo"></img>
+        
+       
+    </section>
+</main></div>
+<footer>
+    <script>  var now = new Date();
+     
+  
+    document.write(`
+    <table border="1" style="margin-left: auto; margin-right: auto; text-align: center;">
+    <tbody><tr><th colspan="2"><h1>Your One Stop For Used Phones - ${first_name[0] + '.' + last_name[0] + '.' }'s</h1></th></tr>
+    <tr><td>1.</td><td><br>Copyright @ ${first_name + ' ' + last_name} </td></tr>
+    <tr><td>2.</td><td>${now.getFullYear()}</td></tr>
+    <tr><td>3.</td><td> ${(now.getHours() + 11) % 12 + 1 + ':' + now.getMinutes()} ${(now.getHours() < 12) ? 'AM' : 'PM'} </td></tr>
+    </tbody></table>`)
+</script>
+<h1>Your One Stop Phone Shop</h1>
+
+</footer>
+</body>
+
+</html>
