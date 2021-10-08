@@ -31,7 +31,7 @@ for (i=0; i<product_quantities.length; i++){
     document.write (`<td>${products[i].name}</td>`);
     document.write(`<td>${products[i].price}</td>`);
     document.write(`<td>${product_quantities[i]}</td>`);
-    extended = product[i].price * product_quantities[i];
+    extended = products[i].price * product_quantities[i];
     document.write(`<td>${extended}</td>`);
     document.write(`</tr>`);
 }
