@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <style>
+        tr:hover {
+            background-color: yellow;
+        }
+    </style>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,55 +14,45 @@
 </head>
 
 <body>
-      
+    <table style="border: 1px solid black;text-align: center;"  onclick="
+        new_row = this.appendChild(document.createElement('tr'));
+        for (i=0; i < this.rows[0].cells.length; i++) {
+            new_cell = this.appendChild(document.createElement('td'));
+            new_cell.innerHTML = 'xxx';
+        }
+        ">
+        <tr>
+            <th>Product #</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Ext Price</th>
+        </tr>
 
-    <script>
-    
-    
-    /* Sales receipt for sale that contains five different products */
-   
-    //Product Data
-  var product_quantities = [2, 1, 1, 3, 12]
-  
-  
-  var product1= {
-    "name": "Gillette Sensor 3 Razor",
-    "quantity": 2,
-    "price": 1.23,
-}
+        <script>
+            var product_quantities = [2, 1, 1, 3, 12];
+            // array of all products
+            // corresponds to product_quantities array
+            // product_quantities[i] is the quantity for products[i]
+            products = [
+                { 'name': 'small gumball', 'price': 0.02 },
+                { 'name': 'medium gumball', 'price': 0.05 },
+                { 'name': 'large gumball', 'price': 0.07 },
+                { 'name': 'small jawbreaker', 'price': 0.06 },
+                { 'name': 'large jawbreaker', 'price': 0.10 }
+            ];
 
-var product_quantities = [2, 1, 1, 3, 12]
+            // products[5] = { 'name': 'xlarge jawbreaker', 'price': 0.25 };
 
-// array of all products
-// corresponds to product_quantities array
-// product_quantities[i] is the quantity for products[i]
-products = [
-{ 'name': 'small gumball', 'price': 0.02 },
-{ 'name': 'medium gumball', 'price': 0.05 },
-{ 'name': 'large gumball', 'price': 0.07 },
-{ 'name': 'small jawbreaker', 'price': 0.06 },
-{ 'name': 'large jawbreaker', 'price': 0.10 }
-];
-
-
-
-
-
-document.write("<table border=1><tr><th>Name</th><th>Price</th><th>Quantity</th><th>Extented</th></tr>");
-for (i=0; i<product_quantities.length; i++){
-  document.write(`<tr>`);
-  document.write (`<td>${products[i].name}</td>`);
-  document.write(`<td>$ ${products[i].price.toFixed(2)}</td>`);
-  document.write(`<td>${product_quantities[i]}</td>`);
-  extended = products[i].price * product_quantities[i];
-  document.write(`<td>$ ${extended.toFixed(2)}</td>`);
-  document.write(`</tr>`);
-}
-document.write("</table>");
-    </script>
+            for (var i = 0; i < product_quantities.length; i++) {
+                document.write(`<tr ><td>${i + 1}</td><td>${products[i].name}</td><td>${products[i].price}</td><td>${product_quantities[i]}</td><td>${(product_quantities[i] * products[i].price).toFixed(2)}</td></tr>`);
+            }
+        </script>
     </table>
-    <input type="button" value = "Delete Last Row" onclick="tbody= document.getElementsByTagName('table')[0];
-    tbody.deleteRow(tobdy.rows.length -1);">
+    <input type="button" value="Delete Last Row" onclick="
+        tbody = document.getElementsByTagName('table')[0];
+        tbody.deleteRow(tbody.rows.length -1);
+    ">
 </body>
 
 </html>
