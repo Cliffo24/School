@@ -17,7 +17,7 @@
     <table style="border: 1px solid black;text-align: center;"  onclick="
         new_row = this.appendChild(document.createElement('tr'));
         for (i=0; i < this.rows[0].cells.length; i++) {
-            new_cell = this.appendChild(document.createElement('td'));
+            new_cell = new_row.appendChild(document.createElement('td'));
             new_cell.innerHTML = 'xxx';
         }
         ">
@@ -44,9 +44,16 @@
 
             
 
-            for (var i = 0; i < product_quantities.length; i++) {
-                document.write(`<tr ><td>${i + 1}</td><td>${products[i].name}</td><td>${products[i].price}</td><td>${product_quantities[i]}</td><td>${(product_quantities[i] * products[i].price).toFixed(2)}</td></tr>`);
-            }
+         for (i=0; i<product_quantities.length; i++){
+            document.write(`<tr>`);
+            document.write (`<td>${products[i].name}</td>`);
+            document.write(`<td>$ ${products[i].price.toFixed(2)}</td>`);
+            document.write(`<td>${product_quantities[i]}</td>`);
+            extended = products[i].price * product_quantities[i];
+            document.write(`<td>$ ${extended.toFixed(2)}</td>`);
+            document.write(`</tr>`);
+}
+
         </script>
     </table>
     <input type="button" value="Delete Last Row" onclick="
