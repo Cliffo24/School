@@ -15,20 +15,20 @@ function convertTemperature(tempIn, units) {
 
 
 /*console.log ("0 C =", convertTemperature(0, "C"));
-console.log("Bad input =", convertTemperature(212,"Q"));
+console.log("Bad input =", convertTemperature(212,"inputString"));
 */
 
 var attributes = "5;-3;0;xxx;7.5;13";
 var pieces = attributes.split(";");
 
-function isNonNegativeInteger(q, returnErrors = false) {
+function isNonNegativeInteger(inputString, returnErrors = false) {
     //Validate that an input value is a non-negative integer
-    // q is input string
+    // inputString is input string; returnErrors indicates how the funciton returns: true means return
    
     errors = []; // assume no errors at first
-    if(Number(q) != q) errors.push('Not a number!'); // Check if string is a number value
-    if(q < 0) errors.push('Negative value!'); // Check if it is non-negative
-    if(parseInt(q) != q) errors.push('Not an integer!'); // Check that it is an integer
+    if(Number(inputString) != inputString) errors.push('Not a number!'); // Check if string is a number value
+    if(inputString < 0) errors.push('Negative value!'); // Check if it is non-negative
+    if(parseInt(inputString) != inputString) errors.push('Not an integer!'); // Check that it is an integer
     return returnErrors ? errors : (errors.length == 0);
 }
 
