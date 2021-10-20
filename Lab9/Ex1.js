@@ -1,4 +1,4 @@
-step1 = 01;
+step1 = 1;
 step2 = parseInt(step1/4);
 step3 = step2 + step1;
 step4 = 3; // Not Jan, so look at month before on table
