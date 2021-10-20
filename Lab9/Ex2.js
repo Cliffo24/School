@@ -1,20 +1,20 @@
-//Check if Robot is stuck
+//Check if controller is stuck
 if (robot.IsFacingWall){
-    robot.turnLeft
+    controller.turnLeft
 }
 else{
-    robot.moveFwd
+    controller.move()
 }
 
 //Eliminate infinite moves 
 num_turns_to_360 = 4; // four turns to 360 
 
-robot.turnRight();
+controller.turnRight();
 
 turns = 0; 
 
-while( robot.isFacingWall() && 
+while( controller.isFacingWall() && 
 	turns++ < num_turns_to_360) {
-		robot.turnLeft();
+		controller.turnLeft();
 }
 
