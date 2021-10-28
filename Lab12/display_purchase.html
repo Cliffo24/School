@@ -8,15 +8,35 @@
 </head>
 <body>
     <script>
+        function isNonNegativeInteger(inputString, returnErrors = false) {
+            
+
+            errors = []; // assume no errors at first
+
+            if (Number(inputString) != inputString) {
+                errors.push('Not a number!'); // Check if string is a number value
+            }
+            else {
+                if (inputString < 0) errors.push('Negative value!'); // Check if it is non-negative
+                if (parseInt(inputString) != inputString) errors.push('Not an integer!'); // Check that it is an integer
+            }
+            return returnErrors ? errors : (errors.length == 0);
+
+        }
+
         let params = (new URL(document.location)).searchParams;
-    
-    
-        //Check if the textbox exists
-        if(param.has('quantity_textbox')){
-            if(isNonNegativeInteger(params.get('quantity_textbox'))){
-            document.body.innerHTML = `Thank you for ordering ${parm.get('quantity_textbox')}things!`;
+
+        // Check if the textbox exists
+        if( params.has('quantity_textbox') ) { 
+            // is the quanity valid? If so, print purchase. If not, give error
+            if(isNonNegativeInteger(params.get('quantity_textbox'))) {
+                 document.body.innerHTML = `Thank for you for ordering ${params.get('quantity_textbox')} items`;
+            } else {
+                document.body.innerHTML = `Invalid quantity bozo - press Back and try again`;
+                //window.location.href = "order_page.html" + document.location.search;
             }
         }
+       
     </script>
 </body>
 </html>
