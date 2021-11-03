@@ -3,7 +3,7 @@ var app = express();
 
 
 app.all('*', function (request, response, next) {
-    response.send(request.method + ' to path ' + request.path);
+    console.log (request.method + ' to path ' + request.path);
     next();
 });
 app.get('/test', function (request, response, next) {
