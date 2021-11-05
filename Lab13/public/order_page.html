@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="./product_data.js"></script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,6 +63,12 @@
     </script>
 
 <form name="quantity_form" action="/process_form" method="POST">
+    <script>
+    for (i in products) {
+        document.write(`<h4>${products[i]["total_sold"]} ${products[i]["brand"]} have been sold!</h4>`);
+    }
+    document.write(`<h3>${products[3]["brand"]} at \$${products[3]["price"]}</h3>`);
+    </script>
 <Label>Quantity Desired</Label>
 <input type="Text" name="quantity_textbox" onkeyup="checkQuantityTextbox();"> 
 <span id='qty_textbox_message'>Enter a quantity</span>
