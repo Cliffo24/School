@@ -78,6 +78,9 @@
         quantity_form.quantity_textbox.value = params.get('quantity_textbox');
         checkQuantityTextbox(quantity_form["quanitity_textbox"]);
     }
+    if (param.has('error')){
+        err_message = params.get(error);
+    }
 </script>
 <input type="submit" value="Purchase">
 </form>
