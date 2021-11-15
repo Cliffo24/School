@@ -1,0 +1,38 @@
+[
+    {  
+    "model":"Nvdia RTX 3080",  
+    "price": 820.00,  
+    "image": "https://CliffordLeung243080.jpg",
+    "quantity_available": 4
+    },
+    {  
+    "model":"Nvdia RTX 3070",  
+    "price": 700.00,  
+    "image": '3070.jpg',
+    "quantity_available": 5
+    },
+    {  
+     "model":"Nvdia RTX 3060",  
+    "price": 700.00,  
+     "image": 'Samsung_Galaxy.jpg',
+     "quantity_available": 5
+     },
+     {  
+     "model":"Nvdia RTX 3080 TI",  
+    "price": 700.00,  
+     "image": 'Samsung_Galaxy.jpg',
+     "quantity_available": 5
+      },
+     {  
+    "model":"Nvdia RTX 3070 ti",  
+    "price": 700.00,  
+    "image": 'Samsung_Galaxy.jpg',
+    "quantity_available": 5
+     },
+    {  
+     "model":"Nvdia RTX 3060 TI",  
+    "price": 700.00,  
+     "image": 'Samsung_Galaxy.jpg',
+    "quantity_available": 5
+     }
+  ]
