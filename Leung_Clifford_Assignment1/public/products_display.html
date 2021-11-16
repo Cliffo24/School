@@ -1,4 +1,4 @@
-<script src="products.json"></script>
+<script src="products_data.js"></script>
 <script>//template taken from W3Schools and modified</script>
 <!DOCTYPE html>
 <html>
@@ -45,7 +45,7 @@
     <h1>RTX 30 Series Graphic Card Models</h1>
     <script>
       //Using master array to make the products display which also put in input for the amount I would want to purchase this includes adding a purhcase button on the bottom.
-  for(i= 0; i <products.length; i++) {
+    for(i= 0; i <products.length; i++) {
     document.write(`<section class = "item">
         <h2>${products[i].model}</h2>
         <p>$${products[i].price}</p>
