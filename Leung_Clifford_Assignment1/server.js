@@ -39,21 +39,61 @@ app.all('*', function (request, response, next) {
 
 app.use(myParser.urlencoded({ extended: true }));
 //Rule to handle process_form request form purchasing page
-app.post("/process_form", function (request, response) {
-   let POST = request.body;
-   let brand = products[0]['model'];
-    let brand_price = products[0]['price'];
-   
-   if(typeof POST ['quantity_textbox'] != 'undefined')
-   {
-       let quantity = POST ['quantity_textbox'];
-       if(isNonNegativeInteger(quantity)){
-           products[0]['total_sold'] += Number(quantity);
-           response.redirect('receipt.html?quantity=' + quantity);  
-       }else{
-           response.redirect('order_page.html?error=Invalid%20Quantity&quantity_textbox=' + quantity)
-       }
-   }
+app.post("/process_invoice", function (request, response, next) {
+    let POST = request.body;
+    if(typeof POST['purchase_submit'] == 'undefined') {
+        console.log('No purchase form data');
+        next();
+    } 
+
+    console.log(Date.now() + ': Purchase made from ip ' + request.ip + ' data: ' + JSON.stringify(POST));
+
+    var contents = fs.readFileSync('./views/invoice.template', 'utf8');
+    response.send(eval('' + contents + '')); // render template string
+
+    function display_invoice_table_rows() {
+        subtotal = 0;
+        str = '';
+        for (i = 0; i < products.length; i++) {
+            a_qty = 0;
+            if(typeof POST[`quantity${i}`] != 'undefined') {
+                a_qty = POST[`quantity${i}`];
+            }
+            if (a_qty > 0) {
+                // product row
+                extended_price =a_qty * products[i].price
+                subtotal += extended_price;
+                str += (`
+      <tr>
+        <td width="43%">${products[i].model}</td>
+        <td align="center" width="11%">${a_qty}</td>
+        <td width="13%">\$${products[i].price}</td>
+        <td width="54%">\$${extended_price}</td>
+      </tr>
+      `);
+            }
+        }
+        // Compute tax
+        tax_rate = 0.0575;
+        tax = tax_rate * subtotal;
+
+        // Compute shipping
+        if (subtotal <= 50) {
+            shipping = 2;
+        }
+        else if (subtotal <= 100) {
+            shipping = 5;
+        }
+        else {
+            shipping = 0.05 * subtotal; // 5% of subtotal
+        }
+
+        // Compute grand total
+        total = subtotal + tax + shipping;
+
+        return str;
+    }
+
 });
 app.use(express.static('./public'));
 
