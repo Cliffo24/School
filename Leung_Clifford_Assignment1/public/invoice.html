@@ -3,6 +3,7 @@
 </script>
 
 <script>
+    //create user input array  and split it into different strings
 function URLToArray(url) {
     var request = {};
     var pairs = url.substring(url.indexOf('?') + 1).split('&');
@@ -14,9 +15,9 @@ function URLToArray(url) {
      }
      return request;
 }
-const product_object = URLToArray(window.location.href)
-var product_quantities_array = Object.entries(product_object)
-
+//const product_object = URLToArray(window.location.href)
+//var product_quantities_array = Object.entries(product_object)
+//generate table
   function generate_item_rows(product_quantities_array) {
       for (i = 0; products[i]; i++) {
           if (product_quantities_array[i] == 0) continue;
@@ -37,7 +38,7 @@ var product_quantities_array = Object.entries(product_object)
   function isNonNegInt(inputstring, returnErrors = false) {
       // Validate that an input value is a non negative integer
       // inputstring is the input string; returnErrors indicates how the function returns
-      // true means return the array. Flase means return a boolean. 
+      // true means return the array. False means return a boolean. 
 
       errors = []; // assume no errors at first
       if (Number(inputstring) != inputstring) errors.push('Not a number!'); // Check if string is a number value
@@ -68,8 +69,8 @@ var product_quantities_array = Object.entries(product_object)
           </tr>
          
           <script>
-
-generate_item_row()
+            
+            generate_item_row()
               subtotal = 0;
              
 

@@ -2,14 +2,14 @@
 var express = require('express');// require express
 var app = express();//require express
 var myParser = require("body-parser");//require body parser
-var data = require ('./public/products_data.js'); //load product_data.js
+var data = require('./public/products_data'); //load product_data.js
 var products = data.products; //Assign data to products
 
 
-var products = require('./products_data.js');
-products.forEach( (prod,i) => {prod.total_sold = 0});
+var products = require('./public/products_data');
+Object.values(products).forEach( (prod, i) => {prod.total_sold = 0});
 
-app.get("/products_data.js", function (request, response, next) {
+app.get("./public/products_data.js", function (request, response, next) {
     response.type('.js');
     var products_str = `var products = ${JSON.stringify(products)};`;
     response.send(products_str);
