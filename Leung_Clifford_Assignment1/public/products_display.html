@@ -52,7 +52,7 @@
         <p>$${products[i].price}</p>
         <label>Quantity:</label>
         <b>${products[i].quantity_available}</b>
-        <input type="text" placeholder="0" name="quantity${i}"> </input>
+        <input type="text" placeholder="0" ${id=theTextbox} name="quantity${i}"> </input>
         <img src="./images/${products[i].image}">      
         </section>`)
 }    
