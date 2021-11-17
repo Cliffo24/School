@@ -15,20 +15,17 @@ app.all('*', function (request, response, next) {
 app.use(myParser.urlencoded({ extended: true }));
 //Rule to handle process_form request form purchasing page
 
-function isNonNegativeInteger(inputString, returnErrors = false) {
-    //Validate that an input value is a non-negative integer
-    // inputString is input string; returnErrors indicates how the funciton returns: true means return
+function isNonNegInt(q, return_errors = false) {
     errors = []; // assume no errors at first
-    if(Number(inputString) != inputString) {
-        errors.push('Not a number!'); // Check if string is a number value
-
-    } 
-   else{
-    if(inputString < 0) errors.push('Negative value!'); // Check if it is non-negative
-    if(parseInt(inputString) != inputString) errors.push('Not an integer!'); // Check that it is an integer
-     } 
-     return returnErrors ? errors : (errors.length == 0)
+    if (q == '') q = 0; // handle blank inputs as if they are 0
+    if (Number(q) != q) errors.push('<font color="red">Not a number!</font>'); // Check if string is a number value
+    else if (q < 0) errors.push('<font color="red">Negative value!</font>'); // Check if it is non-negative
+    else if (parseInt(q) != q) errors.push('<font color="red">Not an integer!</font>'); // Check that it is an integer
+    else if (q > products[i].quantity_available - products[i]["total_sold"]) errors.push('<font color="red">Over quantity available!</font>'); //Check available quantity
+    return return_errors ? errors : (errors.length == 0);
 }
+
+ 
 //processes the form
 app.post("/process_form", function (request, response) {
     let POST = request.body; 
