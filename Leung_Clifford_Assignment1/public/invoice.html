@@ -1,23 +1,32 @@
-<script src="./products_data.js">
-var url_string = window.location;
-var url = new URL(url_string);
-var quantities = url.searchParams.get("quantity");
-  /* This is an invoice of the sales data */
-  console.log(quantities)
+<script src="products_data.js">
+
 </script>
 
 <script>
-    //generating the table of invoice
+function URLToArray(url) {
+    var request = {};
+    var pairs = url.substring(url.indexOf('?') + 1).split('&');
+    for (var i = 0; i < pairs.length; i++) {
+        if(!pairs[i])
+            continue;
+        var pair = pairs[i].split('=');
+        request[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+     }
+     return request;
+}
+const product_object = URLToArray(window.location.href)
+var product_quantities_array = Object.entries(product_object)
+
   function generate_item_rows(product_quantities_array) {
       for (i = 0; products[i]; i++) {
           if (product_quantities_array[i] == 0) continue;
           errors = isNonNegInt(product_quantities_array[i], true);
-          extended_price = products[i].price * quantities[i];
+          extended_price = products[i].price * quantity[i];
           subtotal += extended_price;
           document.write(`
               <tr>
                   <td width="43%">${products[i].model}</td>
-                  <td align="center" width="11%">${quantities[i]}<br><font color="red">${errors.join('<br>')}</font></td>
+                  <td align="center" width="11%">${quantities.quantity[i]}<br><font color="red">${errors.join('<br>')}</font></td>
                   <td width="13%">\$${products[i].price}</td>
                   <td width="54%">\$${extended_price}</td>
               </tr>
@@ -57,11 +66,10 @@ var quantities = url.searchParams.get("quantity");
               <th style="text-align: center;" width="13%">Price</th>
               <th style="text-align: center;" width="54%">Extended Price</th>
           </tr>
-
+         
           <script>
 
-
-             displaytableinvoicerows()
+generate_item_row()
               subtotal = 0;
              
 
