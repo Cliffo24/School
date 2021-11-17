@@ -2,14 +2,15 @@
 var express = require('express');// require express
 var app = express();//require express
 var myParser = require("body-parser");//require body parser
-var data = require ('./public/products_data.js'); //load product_data.js
-var products = data.products; //Code from bottom of 
+var data = require('products.json'); //load products.json
+var products = data.products; //assign products with data
+var http = require('http');
 
 
 var products = require('./products.json');
 products.forEach( (prod,i) => {prod.total_sold = 0});
 
-app.get("/products_data.js", function (request, response, next) {
+app.get("./products.json", function (request, response, next) {
     response.type('.js');
     var products_str = `var products = ${JSON.stringify(products)};`;
     response.send(products_str);
@@ -38,18 +39,13 @@ app.all('*', function (request, response, next) {
 });
 
 app.use(myParser.urlencoded({ extended: true }));
-//Rule to handle process_form request form purchasing page
-app.post("/process_invoice", function (request, response, next) {
+//Rule to handle process_form request form products_display
+app.post("/purchase", function (request, response, next) {
     let POST = request.body;
     if(typeof POST['purchase_submit'] == 'undefined') {
         console.log('No purchase form data');
         next();
     } 
-
-    console.log(Date.now() + ': Purchase made from ip ' + request.ip + ' data: ' + JSON.stringify(POST));
-
-    var contents = fs.readFileSync('./views/invoice.template', 'utf8');
-    response.send(eval('' + contents + '')); // render template string
 
     function display_invoice_table_rows() {
         subtotal = 0;

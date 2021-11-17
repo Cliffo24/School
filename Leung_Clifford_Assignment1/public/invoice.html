@@ -1,13 +1,13 @@
-<script src="products_data.js">
+<script src="./product_data.js">
 var url_string = window.location;
 var url = new URL(url_string);
-var quantities = url.searchParams.get("quantity0");
+var quantities = url.searchParams.get("quantity");
   /* This is an invoice of the sales data */
   console.log(quantities)
 </script>
 
 <script>
-    
+    //generating the table of invoice
   function generate_item_rows(product_quantities_array) {
       for (i = 0; products[i]; i++) {
           if (product_quantities_array[i] == 0) continue;
