@@ -2,25 +2,22 @@
 var express = require('express');// require express
 var app = express();//require express
 var myParser = require("body-parser");//require body parser
-var data = require('./public/products_data'); //load product_data.js
-var products = data.products; //Assign data to products
+const queryString = require("query-string");
 
+var products = require('./public/products_data.js'); //require data from products_data.js
 
-var products = require('./public/products_data');
-Object.values(products).forEach( (prod, i) => {prod.total_sold = 0});
+//Route to handle any request; also calls next
+app.all('*', function (request, response, next) {
+    console.log (request.method + ' to path ' + request.path);
+    next();
+});
 
-app.get("./public/products_data.js", function (request, response, next) {
-    response.type('.js');
-    var products_str = `var products = ${JSON.stringify(products)};`;
-    response.send(products_str);
-    console.log(products_str)
- });
-
+app.use(myParser.urlencoded({ extended: true }));
+//Rule to handle process_form request form purchasing page
 
 function isNonNegativeInteger(inputString, returnErrors = false) {
     //Validate that an input value is a non-negative integer
     // inputString is input string; returnErrors indicates how the funciton returns: true means return
-   
     errors = []; // assume no errors at first
     if(Number(inputString) != inputString) {
         errors.push('Not a number!'); // Check if string is a number value
@@ -32,14 +29,28 @@ function isNonNegativeInteger(inputString, returnErrors = false) {
      } 
      return returnErrors ? errors : (errors.length == 0)
 }
-//Route to handle any request; also calls next
-app.all('*', function (request, response, next) {
-    //console.log (request.method + ' to path ' + request.path);
-    next();
+//processes the form
+app.post("/process_form", function (request, response) {
+    let POST = request.body; 
+    console.log(POST)
+   //validation
+    if (typeof POST['submit_purchase'] != 'undefined') {
+        var hasvalidquantities=true; //check if there are valid quantites
+        var hasquantities=true; //check if it has quantites
+      
+        //redirects if the it has valid quantities to invoice; else it stays on same page
+        const stringified = queryString.stringify(POST);
+        if (hasvalidquantities && hasquantities) {
+            response.redirect("./invoice.html?"+stringified); 
+        }  
+        else { 
+            response.redirect("./products_display.html?" + stringified) 
+        }
+    }
 });
 
-app.use(myParser.urlencoded({ extended: true }));
-//Rule to handle process_form request form purchasing page
+
+
 
 app.use(express.static('./public'));
 

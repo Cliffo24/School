@@ -1,4 +1,4 @@
-<script src="./products_data.js"></script>
+<script src="products_data.js"></script>
 <script>//template taken from W3Schools and modified</script>
 <!DOCTYPE html>
 <html>
@@ -29,39 +29,36 @@
             if (theTextbox.value.trim() == '') errs = ['Quantity']; //if there is no value, display Quantity
             document.getElementById(theTextbox.name + '_label').innerHTML = errs.join(", "); //Log errors
         }
-        
 </script>
 <!-- Image header -->
   <div class="w3-display-container w3-container">
-    <img src="./images/3080.jpg" alt="Graphic Cards" style="width:100%">
+    <img src="/images/3080.jpg" alt="Graphic Cards" style="width:100%">
     <div class="w3-display-topleft w3-text-white" style="padding:24px 48px">
       <h1 class="w3-jumbo w3-hide-small">New arrivals</h1>
       <h1 class="w3-hide-large w3-hide-medium">New arrivals</h1>
       <p><a href="#jeans" class="w3-button w3-black w3-padding-large w3-large">SHOP NOW</a></p>
     </div>
   </div>
-  <form action="./invoice.html" onsubmit="isNonNegInt" method="GET" >
-  <div class="w3-container w3-text-grey" id="jeans">
-    <p>6 items</p>
-    <h1>RTX 30 Series Graphic Card Models</h1>
-    <script>
-      //Using master array to make the products display which also put in input for the amount I would want to purchase this includes adding a purhcase button on the bottom.
-    for(i= 0; i < products.length; i++) {
-    document.write(`<section class = "item">
-        <h2>${products[i].model}</h2>
-        <p>$${products[i].price}</p>
-        <label>Quantity:</label>
-        <b>${products[i].quantity_available}</b>
-        <input type="text" placeholder="0" name="quantity${i}"> </input>
-        <img src="./images/${products[i].image}">      
-        </section>`)
-}    
-
-
-
- </script>
-  </div>
-  <input type="Submit" value="Purchase"> 
-  </form>
+  <form name = "product_main_display" action="/process_form" method="POST">
+    <div class="w3-container w3-text-grey" id="jeans">
+      <p>6 items</p>
+      <h1>RTX 30 Series Graphic Card Models</h1>
+      <script>
+        //Using master array to make the products display which also put in input for the amount I would want to purchase this includes adding a purhcase button on the bottom.
+    for(i= 0; i <products.length; i++) {
+      document.write(`<section class = "item">
+          <h2>${products[i].model}</h2>
+          <p>$${products[i].price}</p>
+          <label id="quantity${i}_label">Quantity:</label>
+          <b>${products[i].quantity_available}</b>
+          <input type="text" placeholder="0" name="quantity${i}">
+          <img src="./images/${products[i].image}">      
+          </section>`)
+  }       
+  
+   </script>
+    </div>
+    <input type ="submit" value="Proceed to Checkout" name="submit_purchase" id="sbutton"> 
+    </form>
 </body>
 </html>
