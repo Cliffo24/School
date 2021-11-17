@@ -2,6 +2,8 @@
 <script src="./products_data.js" type="text/javascript"></script> 
 <script>
         //routing to invoice page
+        //query string to get the data
+        //if it has values it would continue or else stay on same page
         let params = (new URL(document.location)).searchParams;
         var quantities = [];
         if (params.has('submit_purchase')) 

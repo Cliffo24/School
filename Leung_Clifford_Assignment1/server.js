@@ -34,18 +34,35 @@ app.post("/process_form", function (request, response) {
     let POST = request.body; 
     console.log(POST)
    //validation
+
+   //checks if quantities are defined in each textbox
     if (typeof POST['submit_purchase'] != 'undefined') {
-        var hasvalidquantities=true; //check if there are valid quantites
-        var hasquantities=true; //check if it has quantites
-      
+        var negative = false;
+        var Pos = false;
+        for(let i = 0; i < POST.length; i++)
+        {
+    if(POST[i] < 0){
+        negative = true;}
+    else if(POST[i] >0){Pos=true;}
+    } 
+    const stringified = queryString.stringify(POST);
+
+    if(!negative && !Pos){
+        response.redirect("./invoice.html?"+stringified)
+    }else{
+        response.redirect("./products_display.html?" + stringified)
+    }
+        //var hasvalidquantities=true; //assuming there are valid quantites
+      //  var hasquantities=true ; //asumming it has quantities
+
         //redirects if the it has valid quantities to invoice; else it stays on same page
-        const stringified = queryString.stringify(POST);
-        if (hasvalidquantities && hasquantities) {
-            response.redirect("./invoice.html?"+stringified); 
-        }  
-        else { 
-            response.redirect("./products_display.html?" + stringified) 
-        }
+        
+      //  if (hasvalidquantities && hasquantities) {
+        // response.redirect("./invoice.html?"+stringified); 
+      //  }  
+       // else { 
+      //     response.redirect("./products_display.html?" + stringified) 
+       // }
     }
 });
 
