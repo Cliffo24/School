@@ -2,7 +2,7 @@
 var express = require('express');// require express
 var app = express();//require express
 var myParser = require("body-parser");//require body parser
-var data = require('./products.json'); //load products.json
+var data = require('./public/products.json'); //load products.json
 var products = data.products; //assign products with data
 var http = require('http');
 
@@ -40,7 +40,7 @@ app.all('*', function (request, response, next) {
 
 app.use(myParser.urlencoded({ extended: true }));
 //Rule to handle process_form request form products_display
-app.post("/purchase", function (request, response, next) {
+app.get("/purchase", function (request, response, next) {
     let POST = request.body;
     if(typeof POST['purchase_submit'] == 'undefined') {
         console.log('No purchase form data');
