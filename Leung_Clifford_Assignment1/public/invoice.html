@@ -15,8 +15,8 @@ function URLToArray(url) {
      }
      return request;
 }
-//const product_object = URLToArray(window.location.href)
-//var product_quantities_array = Object.entries(product_object)
+const product_object = URLToArray(window.location.href)
+var product_quantities_array = Object.entries(product_object)
 //generate table
   function generate_item_rows(product_quantities_array) {
       for (i = 0; products[i]; i++) {

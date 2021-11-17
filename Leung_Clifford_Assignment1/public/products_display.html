@@ -40,7 +40,7 @@
       <p><a href="#jeans" class="w3-button w3-black w3-padding-large w3-large">SHOP NOW</a></p>
     </div>
   </div>
-  <form action="./invoice.html" method="GET">
+  <form action="./invoice.html" onsubmit="isNonNegInt" method="GET" >
   <div class="w3-container w3-text-grey" id="jeans">
     <p>6 items</p>
     <h1>RTX 30 Series Graphic Card Models</h1>
@@ -52,7 +52,7 @@
         <p>$${products[i].price}</p>
         <label>Quantity:</label>
         <b>${products[i].quantity_available}</b>
-        <input type="text" placeholder="0"  name="quantity${i}"> </input>
+        <input type="text" placeholder="0" name="quantity${i}"> </input>
         <img src="./images/${products[i].image}">      
         </section>`)
 }    
@@ -61,7 +61,7 @@
 
  </script>
   </div>
-  <input type="Submit" value="Purchase" > 
+  <input type="Submit" value="Purchase"> 
   </form>
 </body>
 </html>
