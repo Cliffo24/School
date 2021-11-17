@@ -2,7 +2,7 @@
 var express = require('express');// require express
 var app = express();//require express
 var myParser = require("body-parser");//require body parser
-var data = require('products.json'); //load products.json
+var data = require('./products.json'); //load products.json
 var products = data.products; //assign products with data
 var http = require('http');
 
