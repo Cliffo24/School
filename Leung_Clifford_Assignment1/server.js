@@ -15,14 +15,40 @@ app.all('*', function (request, response, next) {
 app.use(myParser.urlencoded({ extended: true }));
 //Rule to handle process_form request form purchasing page
 
-function isNonNegInt(q, return_errors = false) {
-    errors = []; // assume no errors at first
-    if (q == '') q = 0; // handle blank inputs as if they are 0
-    if (Number(q) != q) errors.push('<font color="red">Not a number!</font>'); // Check if string is a number value
-    else if (q < 0) errors.push('<font color="red">Negative value!</font>'); // Check if it is non-negative
-    else if (parseInt(q) != q) errors.push('<font color="red">Not an integer!</font>'); // Check that it is an integer
-    else if (q > products[i].quantity_available - products[i]["total_sold"]) errors.push('<font color="red">Over quantity available!</font>'); //Check available quantity
-    return return_errors ? errors : (errors.length == 0);
+
+function isValidNumber(q) {
+    //assume no errors
+    var result = true;
+
+    // handle blank inputs as if they are 0
+    if (q == '') 
+        q = 0;
+
+    // Check if string is a number value
+    if (!Number(q)){
+        errors.push('<font color="red">Not a number!</font>'); 
+        result =false;
+    }
+
+    // Check if it is non-negative
+    if (q < 0){
+        errors.push('<font color="red">Negative value!</font>'); 
+        result =false;
+    }
+
+    // Check that it is an integer
+    if (!Number.isInteger(q)){
+        errors.push('<font color="red">Not an integer!</font>'); 
+        return_errors=false;
+    }
+
+    //Check available quantity
+    if (q > products[i].quantity_available){ 
+        errors.push('<font color="red">Over quantity available!</font>'); 
+        return_errors=false;
+    }
+
+    return return_errors;
 }
 
  
@@ -34,17 +60,17 @@ app.post("/process_form", function (request, response) {
 
    //checks if quantities are defined in each textbox
     if (typeof POST['submit_purchase'] != 'undefined') {
-        var negative = false;
-        var Pos = false;
+        var invalid = false;
         for(let i = 0; i < POST.length; i++)
         {
-    if(POST[i] < 0){
-        negative = true;}
-    else if(POST[i] >0){Pos=true;}
+            if(!isValidNumber(POST[i])){
+                invalid = true;
+            }
+        }
     } 
     const stringified = queryString.stringify(POST);
 
-    if(!negative && !Pos){
+    if(!invalid){
         response.redirect("./invoice.html?"+stringified)
     }else{
         response.redirect("./products_display.html?" + stringified)
@@ -60,7 +86,6 @@ app.post("/process_form", function (request, response) {
        // else { 
       //     response.redirect("./products_display.html?" + stringified) 
        // }
-    }
 });
 
 
