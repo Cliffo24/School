@@ -6,7 +6,6 @@
         //if it has values it would continue or else stay on same page
         let params = (new URL(document.location)).searchParams;
         var quantities = [];
-        if (params.has('submit_purchase')) 
         {
             
             for (i = 0; i <products.length; i++)
@@ -18,10 +17,8 @@
                 }
             }
         }
-        else
-        {
-            window.location.href ='./products_display.html'; 
-        }
+
+        document.write(POST)
 </script>
 
 <!DOCTYPE html>

@@ -19,6 +19,7 @@ app.use(myParser.urlencoded({ extended: true }));
 function isValidNumber(q) {
     //assume no errors
     var result = true;
+    errors = []
 
     // handle blank inputs as if they are 0
     if (q == '') 
@@ -39,38 +40,63 @@ function isValidNumber(q) {
     // Check that it is an integer
     if (!Number.isInteger(q)){
         errors.push('<font color="red">Not an integer!</font>'); 
-        return_errors=false;
+        result=false;
     }
 
-    //Check available quantity
-    if (q > products[i].quantity_available){ 
-        errors.push('<font color="red">Over quantity available!</font>'); 
-        return_errors=false;
-    }
-
-    return return_errors;
+    return result;
 }
 
  
 //processes the form
 app.post("/process_form", function (request, response) {
-    let POST = request.body; 
-    console.log(POST)
+    let POST = request.body;
+    const objarray= Object.values(POST)
+   var result =true
+  
    //validation
-
+    
    //checks if quantities are defined in each textbox
-    if (typeof POST['submit_purchase'] != 'undefined') {
-        var invalid = false;
-        for(let i = 0; i < POST.length; i++)
-        {
-            if(!isValidNumber(POST[i])){
-                invalid = true;
-            }
-        }
-    } 
-    const stringified = queryString.stringify(POST);
+    if (typeof request.query['purchase_submit'] != 'undefined')
+        for(i = 0; i < objarray.length; i++){   
+            
+    // Check if it is non-negative
+    var initialquantites= objarray[i]
+    var totalquantities= totalquantities+initialquantites
+    console.log(objarray[i])
+    if(initialquantites != "undefined")
+    console.log("Undefined")
+    errors = []
+        // handle blank inputs as if they are 0
+        // handle blank inputs as if they are 0
+        
+            if (i == '') 
+             i = 0;
 
-    if(!invalid){
+        // Check if string is a number value
+            if (!Number(i)){
+                errors.push('<font color="red">Not a number!</font>'); 
+                result =false;
+}
+
+        // Check if it is non-negative
+            if (i < 0){
+                errors.push('<font color="red">Negative value!</font>'); 
+                result =false;
+}
+
+        // Check that it is an integer
+            if (!Number.isInteger(i)){
+                errors.push('<font color="red">Not an integer!</font>'); 
+                 result=false;
+}
+
+            return result;
+}
+ 
+   
+
+    if(result){
+        const stringified = queryString.stringify(POST);
         response.redirect("./invoice.html?"+stringified)
     }else{
         response.redirect("./products_display.html?" + stringified)
