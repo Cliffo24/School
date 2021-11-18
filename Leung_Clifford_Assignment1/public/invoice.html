@@ -10,13 +10,14 @@
             
             for (i = 0; i <products.length; i++)
             {
-                if(params.has(`quantity${i}`))
+            if(params.has(`quantity${i}`))
                 {
-                    a_qty = params.get(`quantity${i}`);
-                    quantities[i]=a_qty;
+                  a_qty = params.get(`quantity${i}`);
+                  quantities[i]=a_qty;
                 }
             }
         }
+        document.write(a_qty)
 </script>
 
 <!DOCTYPE html>

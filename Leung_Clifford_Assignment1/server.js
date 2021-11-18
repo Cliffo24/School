@@ -16,34 +16,13 @@ app.use(myParser.urlencoded({ extended: true }));
 //Rule to handle process_form request form purchasing page
 
 
-function isValidNumber(q) {
-    //assume no errors
-    var result = true;
-    errors = []
-
-    // handle blank inputs as if they are 0
-    if (q == '') 
-        q = 0;
-
-    // Check if string is a number value
-    if (!Number(q)){
-        errors.push('<font color="red">Not a number!</font>'); 
-        result =false;
-    }
-
-    // Check if it is non-negative
-    if (q < 0){
-        errors.push('<font color="red">Negative value!</font>'); 
-        result =false;
-    }
-
-    // Check that it is an integer
-    if (!Number.isInteger(q)){
-        errors.push('<font color="red">Not an integer!</font>'); 
-        result=false;
-    }
-
-    return result;
+function isNonNegInt(q, return_errors = false) {
+    errors = []; // assume no errors at first
+    if (q == '') q = 0; // handle blank inputs as if they are 0
+    if (Number(q) != q) errors.push('<font color="red">Not a number!</font>'); // Check if string is a number value
+    if (q < 0) errors.push('<font color="red">Negative value!</font>'); // Check if it is non-negative
+    if (parseInt(q) != q) errors.push('<font color="red">Not an integer!</font>'); // Check that it is an integer
+    return return_errors ? errors : (errors.length == 0);
 }
 
  
@@ -51,67 +30,56 @@ function isValidNumber(q) {
 app.post("/process_form", function (request, response) {
     let POST = request.body;
     const objarray= Object.values(POST)
-   var result =true
+         console.log(POST) 
   
    //validation
     
-   //checks if quantities are defined in each textbox
-    if (typeof request.query['purchase_submit'] != 'undefined')
-        for(i = 0; i < objarray.length; i++){   
+    //checks if quantities are defined in each textbox
+    //start with result being false
+   var result= false 
+    for(i = 0; i < objarray.length; i++){   
             
-    // Check if it is non-negative
-    var initialquantites= objarray[i]
-    var totalquantities= totalquantities+initialquantites
-    console.log(objarray)
-    if(totalquantities != "undefined"){
-
-    errors = []
-
-        // handle blank inputs as if they are 0
-        
-            if (objarray[i] == '') 
-            objarray[i] = 0;
-
-        // Check if string is a number value
-            if (!Number(objarray[i])){
-                errors.push('<font color="red">Not a number!</font>'); 
-                result =false;
-}
-
         // Check if it is non-negative
-            if (objarray < 0){
-                errors.push('<font color="red">Negative value!</font>'); 
-                result =false;
-}
-
-        // Check that it is an integer
-            if (!Number.isInteger(i)){
-                errors.push('<font color="red">Not an integer!</font>'); 
-                 result=false;
-}
-
-            return result;
-}
- 
-}
-
-    if(result){
-        const stringified = queryString.stringify(POST);
+        var initialquantites= objarray[i]
+        var totalquantities= totalquantities+initialquantites
+                 console.log((parseInt(objarray[i])!=parseFloat(objarray[i])))
+            if(totalquantities != "undefined"){
+            //To check if it is a whole number but code did not work so I did not include
+            //if(parseInt(objarray[i])!=parseFloat(objarray[i])){
+                
+            // return response.send(`<script>
+                //  alert("Please enter a whole number"); 
+                // window.history.back();
+                //  </script>`);
+           // }
+           //To Check if it is a posive number
+            if(0>objarray[i]){
+                return response.send(`<script>
+                alert("Please enter a positive number"); 
+                window.history.back();
+                
+                </script>`);
+            }//To Check if it is a valid number
+            if(Number(objarray[i])!=objarray[i]){
+                return response.send(`<script>
+                alert("Please enter a valid number"); 
+                window.history.back();
+                    
+                    </script>`);
+            }
+            //if it ends true meaning if all the validation is right it goes redirects to invoice which calculates the invoice
+            else{
+                result=true
+            }
+        }
+    }    
+    const stringified = queryString.stringify(POST);
+//if the results =true it would redirect to invoice but if it fails validation it pops up error and redirects to display page
+    if(result==true){
         response.redirect("./invoice.html?"+stringified)
     }else{
         response.redirect("./products_display.html?" + stringified)
     }
-        //var hasvalidquantities=true; //assuming there are valid quantites
-      //  var hasquantities=true ; //asumming it has quantities
-
-        //redirects if the it has valid quantities to invoice; else it stays on same page
-        
-      //  if (hasvalidquantities && hasquantities) {
-        // response.redirect("./invoice.html?"+stringified); 
-      //  }  
-       // else { 
-      //     response.redirect("./products_display.html?" + stringified) 
-       // }
 });
 
 
