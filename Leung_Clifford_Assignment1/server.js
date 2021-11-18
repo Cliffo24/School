@@ -62,24 +62,24 @@ app.post("/process_form", function (request, response) {
     // Check if it is non-negative
     var initialquantites= objarray[i]
     var totalquantities= totalquantities+initialquantites
-    console.log(objarray[i])
-    if(initialquantites != "undefined")
-    console.log("Undefined")
+    console.log(objarray)
+    if(totalquantities != "undefined"){
+
     errors = []
-        // handle blank inputs as if they are 0
+
         // handle blank inputs as if they are 0
         
-            if (i == '') 
-             i = 0;
+            if (objarray[i] == '') 
+            objarray[i] = 0;
 
         // Check if string is a number value
-            if (!Number(i)){
+            if (!Number(objarray[i])){
                 errors.push('<font color="red">Not a number!</font>'); 
                 result =false;
 }
 
         // Check if it is non-negative
-            if (i < 0){
+            if (objarray < 0){
                 errors.push('<font color="red">Negative value!</font>'); 
                 result =false;
 }
@@ -93,7 +93,7 @@ app.post("/process_form", function (request, response) {
             return result;
 }
  
-   
+}
 
     if(result){
         const stringified = queryString.stringify(POST);
