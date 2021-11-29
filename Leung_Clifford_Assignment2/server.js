@@ -15,16 +15,6 @@ app.all('*', function (request, response, next) {
 app.use(myParser.urlencoded({ extended: true }));
 //Rule to handle process_form request form purchasing page
 
-
-function isNonNegInt(q, return_errors = false) {
-    errors = []; // assume no errors at first
-    if (q == '') q = 0; // handle blank inputs as if they are 0
-    if (Number(q) != q) errors.push('<font color="red">Not a number!</font>'); // Check if string is a number value
-    if (q < 0) errors.push('<font color="red">Negative value!</font>'); // Check if it is non-negative
-    if (parseInt(q) != q) errors.push('<font color="red">Not an integer!</font>'); // Check that it is an integer
-    return return_errors ? errors : (errors.length == 0);
-}
-
  
 //processes the form
 app.post("/process_form", function (request, response) {
