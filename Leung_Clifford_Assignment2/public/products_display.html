@@ -1,0 +1,95 @@
+<script src="products_data.js"></script>
+<script>
+  //From Lab 12 from Assignment Example
+  function isNonNegInt(q, return_errors = false) {
+          errors = []; // assume no errors at first
+          if (q == '') q = 0; // handle blank inputs as if they are 0
+          if (Number(q) != q) errors.push('<font color="red">Not a number!</font>'); // Check if string is a number value
+          else if (q < 0) errors.push('<font color="red">Negative value!</font>'); // Check if it is non-negative
+          else if (parseInt(q) != q) errors.push('<font color="red">Not an integer!</font>'); // Check that it is an integer
+          else if (q > products[i].quantity_available - products[i]["total_sold"]) errors.push('<font color="red">Over quantity available!</font>'); //Check available quantity
+          return return_errors ? errors : (errors.length == 0);
+      }
+
+      //From Assignment 1 example
+      function checkQuantityTextbox(theTextbox) {
+          errs = isNonNegInt(theTextbox.value, true);
+          if (errs.length == 0) errs = ['You want:']; //if the error length is 0, display You Want to
+          if (theTextbox.value.trim() == '') errs = ['Quantity']; //if there is no value, display Quantity
+          document.getElementById(theTextbox.name + '_label').innerHTML = errs.join(", "); //Log errors
+      }
+      window.onload = function () {
+      let params = (new URL(document.location)).searchParams; // get the query string which has the form data
+      // form was submitted so check that quantities are valid then redirect to invoice if ok.
+      if (params.has('purchase_submit')) {
+          has_errors = false; // assume quantities are valid from the start
+          total_qty = 0; // need to check if something was selected so we will look if the total > 0
+          for (i = 0; i < products.length; i++) {
+              if (params.has(`quantity${i}`)) {
+                  a_qty = params.get(`quantity${i}`);
+                  // make textboxes sticky in case of invalid data
+                  product_selection_form[`quantity${i}`].value = a_qty;
+                  total_qty += a_qty; 
+                  if(!isNonNegInt(a_qty)) {
+                      has_errors = true; // oops, invalid quantity
+                      checkQuantityTextbox(product_selection_form[`quantity${i}`]); // show where the error is
+                  }
+              }
+          }
+          // Now respond to errors or redirect to invoice if all is ok
+          if(has_errors) {
+              alert("Please enter only valid quantities!");
+          } else if(total_qty == 0) { // no quantity selections, just give a general alert
+              alert("Please select some quantities!");
+          } else { // all good to go!
+              window.location = `./invoice.html${document.location.search}`;
+              window.stop;
+          }
+      }
+  }
+</script>
+<script>//template taken from W3Schools and modified</script>
+<!DOCTYPE html>
+<html>
+<title>Shopping for GPU</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="products-style.css">
+
+
+<!-- Image header -->
+  <div class="w3-display-container w3-container">
+    <img src="/images/3080.jpg" alt="Graphic Cards" style="width:100%">
+    <div class="w3-display-topleft w3-text-white" style="padding:24px 48px">
+      <h1 class="w3-jumbo w3-hide-small">New arrivals</h1>
+      <h1 class="w3-hide-large w3-hide-medium">New arrivals</h1>
+      <p><a href="#jeans" class="w3-button w3-black w3-padding-large w3-large">SHOP NOW</a></p>
+    </div>
+  </div>
+  <form name = "product_main_display" action="/process_form" method="POST">
+    <div class="w3-container w3-text-grey" id="jeans">
+      <p>6 items</p>
+      <h1>RTX 30 Series Graphic Card Models</h1>
+      <script>
+        //Using master array to make the products display which also put in input for the amount I would want to purchase this includes adding a purhcase button on the bottom.
+    for(i= 0; i <products.length; i++) {
+      document.write(`<section class = "item">
+          <h2>${products[i].model}</h2>
+          <p>$${products[i].price}</p>
+          <label id="quantity${i}_label">Quantity:</label>
+          <b>${products[i].quantity_available}</b>
+          <input type="text" placeholder="0" name="quantity${i}">
+          <img src="./images/${products[i].image}">      
+          </section>`)
+  }       
+  
+   </script>
+    </div>
+    <input type ="submit"  id="submit_purchase"> 
+    </form>
+</body>
+</html>
