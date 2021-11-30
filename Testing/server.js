@@ -10,10 +10,11 @@ var fs = require('fs');
     var user_data_filename = "./user_data.json"; 
 //require querystring
     var queryString = require("query-string") 
-    const { stringify } = require('querystring');
+    const { stringify } = require('query-string');
 //require data from products_data.js
     var products = require('./public/products_data.js'); 
-const { response } = require('express');
+    const {response} = require ('express')
+
 //starts parser
     app.use(myParser.urlencoded({ extended: true }));
 
@@ -87,7 +88,7 @@ app.post("/process_form", function (request, response) {
     const stringified = queryString.stringify(POST);
 //if the results =true it would redirect to invoice but if it fails validation it pops up error and redirects to display page
     if(result==true){
-        response.redirect("./login.view?"+stringified)
+        response.redirect("./login?"+stringified)
     }
     else{
         alert("Enter valid quantity")
@@ -110,26 +111,33 @@ if (fs.existsSync(user_data_filename))
     }    
 //if the json file doesnt exist 
 else{
-    console.log(user_data_filename + "Wrong filename. Enter the right fileaname!");
+    console.log(user_data_filename + "Wrong filename. Enter the right filename!");
     }
+
 
 
 //Get request from login.view
 app.get("/login", function (request, response){
     var loginview = fs.readFileSync("./public/login.view",'utf-8');
 //loading the template
-    response.send(eval(" [ " + loginview + " ] "))
+    response.send(eval('`' + loginview + '`'));
 });
 //taken form File I/O Lab and modified
 app.post("/loginform", function (request, response){
-    console.log(request.body);
-    username = request.body.username.toLowerCase();
-if(typeof user_data[username] != 'undefined'){
-    if((user_data[username].password == request.body.password)== true){
-        console.log(username + "Logged in");
-        full_name = user_data_filename[username].name;
-        var loginview = fs.readFileSync('./public/invoice.view', 'utf-8');
-        response.send(eval(" [ " + loginview + " ] "))
+    console.log("got a post")
+    POST = request.body;
+    user_name = POST["username"];
+    user_pass = POST["password"];
+
+    console.log(POST);
+    entered_username = request.body.username.toLowerCase();
+if(typeof user_data[user_name] != 'undefined'){
+    if((user_data[user_name].password == user_pass)== true){
+        console.log(user_name + "Logged in");
+        full_name = user_data[user_name].name;
+        var invoiceview = fs.readFileSync('./public/invoice.view', 'utf-8');
+         response.send(eval('`' + invoiceview + '`'));
+    
 }   else{ 
     response.send(`<script>
         alert("Password entered is wrong"); 
