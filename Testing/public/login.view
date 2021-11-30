@@ -86,8 +86,10 @@ span.psw {
   </div>
 
   <div class="container" style="background-color:#f1f1f1">
-    <button type="button" class="cancelbtn" onclick="response.redirect('./public/products_display.html')">Cancel</button>
-    <span class="psw"> New <a href="#">register?</a></span>
+    <a href="/products_display.html">
+      <input type="button" value="Cancel" />
+   </a>
+    <span class="psw"> New <a href="/register.view">register?</a></span>
   </div>
 </form>
 

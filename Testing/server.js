@@ -135,10 +135,10 @@ app.post("/loginform", function (request, response){
 if(typeof user_data[user_name] != 'undefined'){
     if((user_data[user_name].password == user_pass)== true){
         console.log(user_name + " Logged in");
-        full_name = user_data[user_name].name;
-        var invoiceview = fs.readFileSync('./public/invoice.view', 'utf-8');
-        response.send(eval('`' + invoiceview + '`'));
-    
+//reads the file of invoice.view
+    var invoiceview = fs.readFileSync("./public/invoice.view",'utf-8');
+//writes out the invoice
+    response.send(eval('`' + invoiceview + '`'))
 }   else{ 
     response.send(`<script>
         alert("Password entered is wrong"); 
@@ -156,8 +156,13 @@ if(typeof user_data[user_name] != 'undefined'){
         }
 
 });
+//writes
+app.get("/register", function (request, response) {
+    var registerview = fs.readFileSync('./public/register.view', 'utf-8');
+    response.send(eval('`' + registerview + '`'));
+});
 
-app.post("/register", function (request, response){
+app.post("/registernew", function (request, response){
     var new_user_name = request.body.username;
     var new_user_password = request.body.password;
     var new_user_email = request.body.email.toLowerCase();
