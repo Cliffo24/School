@@ -89,7 +89,7 @@ span.psw {
     <a href="/products_display.html">
       <input type="button" value="Cancel" />
    </a>
-    <span class="psw"> New <a href="/register.view">register?</a></span>
+    <span class="psw"> New <a href="/register">register?</a></span>
   </div>
 </form>
 

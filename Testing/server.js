@@ -138,7 +138,7 @@ if(typeof user_data[user_name] != 'undefined'){
 //reads the file of invoice.view
     var invoiceview = fs.readFileSync("./public/invoice.view",'utf-8');
 //writes out the invoice
-    response.send(eval('`' + invoiceview + '`'))
+    response.send(eval('`' + invoiceview + '`'));
 }   else{ 
     response.send(`<script>
         alert("Password entered is wrong"); 
