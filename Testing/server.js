@@ -13,6 +13,7 @@ var fs = require('fs');
     const { stringify } = require('querystring');
 //require data from products_data.js
     var products = require('./public/products_data.js'); 
+const { response } = require('express');
 //starts parser
     app.use(myParser.urlencoded({ extended: true }));
 
@@ -48,12 +49,7 @@ app.post("/process_form", function (request, response) {
         console.log((parseInt(objarray[i])!=parseFloat(objarray[i])))
     if(totalquantities != "undefined")
     {
-//To check if it is a whole number but code did not work so I did not include
-    //if(parseInt(objarray[i])!=parseFloat(objarray[i])){        
-    // return response.send(`<script>
-    //  alert("Please enter a whole number"); 
-    // window.history.back();
-    //  </script>`);
+
 // }
     //To Check if it is a posive number
     if(0>objarray[i])
@@ -64,6 +60,13 @@ app.post("/process_form", function (request, response) {
                 
          </script>`);
     }
+     //To check if it is a whole number but code did not work so I did not include
+    // if(parseInt(objarray[i]) != (objarray[i])){        
+       // return response.send(`<script>
+         //  alert("Please enter a whole number"); 
+          // window.history.back();
+        // </script>`);
+   // }
     //To Check if it is a valid number
     if(Number(objarray[i])!=objarray[i])
     {
@@ -73,6 +76,7 @@ app.post("/process_form", function (request, response) {
                     
         </script>`);
     }
+   
     //if it ends true meaning if all the validation is right it goes redirects to invoice which calculates the invoice
     else
         {
@@ -83,7 +87,7 @@ app.post("/process_form", function (request, response) {
     const stringified = queryString.stringify(POST);
 //if the results =true it would redirect to invoice but if it fails validation it pops up error and redirects to display page
     if(result==true){
-        response.redirect("./login?"+stringified)
+        response.redirect("./login.view?"+stringified)
     }
     else{
         alert("Enter valid quantity")
@@ -93,7 +97,7 @@ app.post("/process_form", function (request, response) {
 
 
 
-//to read user files
+//to read user files, taken from lab 14 and modified
 if (fs.existsSync(user_data_filename)) 
     {
     data = fs.readFileSync(user_data_filename, 'utf-8');
@@ -113,10 +117,47 @@ else{
 //Get request from login.view
 app.get("/login", function (request, response){
     var loginview = fs.readFileSync("./public/login.view",'utf-8');
+//loading the template
     response.send(eval(" [ " + loginview + " ] "))
 });
+//taken form File I/O Lab and modified
+app.post("/loginform", function (request, response){
+    console.log(request.body);
+    username = request.body.username.toLowerCase();
+if(typeof user_data[username] != 'undefined'){
+    if((user_data[username].password == request.body.password)== true){
+        console.log(username + "Logged in");
+        full_name = user_data_filename[username].name;
+        var loginview = fs.readFileSync('./public/invoice.view', 'utf-8');
+        response.send(eval(" [ " + loginview + " ] "))
+}   else{ 
+    response.send(`<script>
+        alert("Password entered is wrong"); 
+        window.history.back();
+        
+        </script>`);
+    }
+}
+        else{
+            response.send(`<script>
+                alert("Username entered is wrong"); 
+                window.history.back();
+                
+         </script>`);
+        }
 
-//T
+});
+
+app.post("/register", function (request, response){
+    var new_user_name = request.body.username;
+    var new_user_password = request.body.password;
+    var new_user_email = request.body.email.toLowerCase();
+    var new_user_fullname = request.body.name;
+});
+
+
+
+
 
 app.use(express.static('./public'));
 app.listen(8080, () => console.log(`listening on port 8080`)); // note the use of an anonymous function here
