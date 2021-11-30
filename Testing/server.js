@@ -123,6 +123,7 @@ app.get("/login", function (request, response){
     response.send(eval('`' + loginview + '`'));
 });
 //taken form File I/O Lab and modified
+//take the information from login page and post it to the login form
 app.post("/loginform", function (request, response){
     console.log("got a post")
     POST = request.body;
@@ -130,13 +131,13 @@ app.post("/loginform", function (request, response){
     user_pass = POST["password"];
 
     console.log(POST);
-    entered_username = request.body.username.toLowerCase();
+//to verify a existing user and login
 if(typeof user_data[user_name] != 'undefined'){
     if((user_data[user_name].password == user_pass)== true){
-        console.log(user_name + "Logged in");
+        console.log(user_name + " Logged in");
         full_name = user_data[user_name].name;
         var invoiceview = fs.readFileSync('./public/invoice.view', 'utf-8');
-         response.send(eval('`' + invoiceview + '`'));
+        response.send(eval('`' + invoiceview + '`'));
     
 }   else{ 
     response.send(`<script>
