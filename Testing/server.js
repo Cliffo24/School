@@ -18,7 +18,7 @@ var fs = require('fs');
 //starts parser
     app.use(myParser.urlencoded({ extended: true }));
 
-
+    var stringified
 //Route to handle any request; also calls next
 app.all('*', function (request, response, next) {
     console.log (request.method + ' to path ' + request.path);
@@ -85,17 +85,17 @@ app.post("/process_form", function (request, response) {
         }
     }
         }    
-    const stringified = queryString.stringify(POST);
+     stringified = queryString.stringify(POST);
 //if the results =true it would redirect to invoice but if it fails validation it pops up error and redirects to display page
     if(result==true){
-        response.redirect("./login?"+stringified)
+        response.redirect("./login?"+ stringified)
     }
     else{
         alert("Enter valid quantity")
         response.redirect("./products_display.html?" + stringified)
+        
     }
 });
-
 
 
 //to read user files, taken from lab 14 and modified
@@ -114,13 +114,13 @@ else{
     console.log(user_data_filename + "Wrong filename. Enter the right filename!");
     }
 
-
-
 //Get request from login.view
 app.get("/login", function (request, response){
     var loginview = fs.readFileSync("./public/login.view",'utf-8');
 //loading the template
     response.send(eval('`' + loginview + '`'));
+
+    
 });
 //taken form File I/O Lab and modified
 //take the information from login page and post it to the login form
@@ -129,16 +129,17 @@ app.post("/loginform", function (request, response){
     POST = request.body;
     user_name = POST["username"];
     user_pass = POST["password"];
+    console.log(POST)
+    
+   
 
-    console.log(POST);
 //to verify a existing user and login
 if(typeof user_data[user_name] != 'undefined'){
     if((user_data[user_name].password == user_pass)== true){
         console.log(user_name + " Logged in");
-//reads the file of invoice.view
-    var invoiceview = fs.readFileSync("./public/invoice.view",'utf-8');
-//writes out the invoice
-    response.send(eval('`' + invoiceview + '`'));
+     
+//if it is verified it would redirect to invoice with the quantities
+    response.redirect("./invoice.html?" + stringified + queryString.stringify(POST) )
 }   else{ 
     response.send(`<script>
         alert("Password entered is wrong"); 
@@ -156,18 +157,54 @@ if(typeof user_data[user_name] != 'undefined'){
         }
 
 });
-//writes
+//reads and writes the register.view / register page
 app.get("/register", function (request, response) {
     var registerview = fs.readFileSync('./public/register.view', 'utf-8');
     response.send(eval('`' + registerview + '`'));
 });
-
+//taken from File/IO Lab and modified for registration
 app.post("/registernew", function (request, response){
-    var new_user_name = request.body.username;
-    var new_user_password = request.body.password;
-    var new_user_email = request.body.email.toLowerCase();
-    var new_user_fullname = request.body.name;
+    console.log("got a new register")
+    POST = request.body;
+  
+//getting the user info from the /register page
+    var user_name = POST["username"];
+    var new_user_password = POST["password"];
+    var new_user_password_rpt = POST["passwordrpt"];
+    var new_user_email = POST["email"].toLowerCase();
+    var new_user_fullname = POST["fullname"];
+    console.log(POST)
+
+//putting user POST into variables to help write the data into the user_data.json
+    user_data[user_name] = {};
+    user_data[user_name].fullname = new_user_fullname;
+    user_data[user_name].email = new_user_email;
+    user_data[user_name].password = new_user_password;
+    user_data[user_name].passwordrpt = new_user_password_rpt;
+
+   
+    
+
+if(typeof user_data[user_name] != 'undefined')
+{
+    response.send(`<script>
+        alert("Username: ${user_name} exists"); 
+        window.history.back();
+        
+        </script>`);
+    console.log("Username Exist")
+}   else{ 
+    UsernameValid = true
+    }   
+    if(!validateUsername(user_name)){
+        console.log("Username Exceeded 15 characters or has less than 5 characters")
+    }
+
+    data = JSON.stringify(user_data);
+    fs.writeFileSync(user_data_filename, data, "utf-8");
+    
 });
+
 
 
 
