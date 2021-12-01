@@ -13,7 +13,8 @@ var fs = require('fs');
     const { stringify } = require('query-string');
 //require data from products_data.js
     var products = require('./public/products_data.js'); 
-    const {response} = require ('express')
+    const {response} = require ('express');
+const { getMaxListeners } = require('process');
 
 //starts parser
     app.use(myParser.urlencoded({ extended: true }));
@@ -182,7 +183,7 @@ app.post("/registernew", function (request, response){
     user_data[user_name].password = new_user_password;
     user_data[user_name].passwordrpt = new_user_password_rpt;
 
-   
+ 
     
 
 if(typeof user_data[user_name] != 'undefined')
@@ -196,9 +197,7 @@ if(typeof user_data[user_name] != 'undefined')
 }   else{ 
     UsernameValid = true
     }   
-    if(!validateUsername(user_name)){
-        console.log("Username Exceeded 15 characters or has less than 5 characters")
-    }
+    
 
     data = JSON.stringify(user_data);
     fs.writeFileSync(user_data_filename, data, "utf-8");
@@ -206,6 +205,10 @@ if(typeof user_data[user_name] != 'undefined')
 });
 
 
+function validateEmail(email) {//used =@ and +\. to seperate sections of email
+    const re = /^[a-zA-Z0-9._]+@[a-zA-Z0-9.]+\.[a-z]{2,3}$/;
+    return re.test(String(email).toLowerCase());
+}
 
 
 
