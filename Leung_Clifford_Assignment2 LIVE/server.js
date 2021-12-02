@@ -11,13 +11,14 @@ var fs = require('fs');
 //require querystring
     var queryString = require("query-string") 
     const { stringify } = require('query-string');
-//require data from products_data.js
-    var data = require('./public/products_data.js'); //load product_data.js
-    var products = data.products; //Code from bottom of product_data.js
+//require data from products_data.js /loading it
+    var data = require('./public/products_data.js'); 
+//Code from bottom of product_data.js
+    var products = data.products; 
 
 //starts parser
     app.use(myParser.urlencoded({ extended: true }));
-//global variable to recall back the function to display the array after running through validation
+//global variable to recall back the function to display the array after running through validation because this wasn't running I made another global variable at the bottom
 var stringified ={}
 //Route to handle any request; also calls next
 app.all('*', function (request, response, next) {
@@ -298,13 +299,13 @@ function display_invoice_table_rows() {
         }
     }
 
-
-    // Compute tax
+//Taken from Invoice Lab and modified
+// Compute tax
     tax_rate = 0.0471;
     tax = tax_rate * subtotal;
 
-    // Compute shipping
-    if (subtotal <= 1000) {
+// Compute shipping
+if (subtotal <= 1000) {
         shipping = 50;
     }
  else if (subtotal <= 2000) {
