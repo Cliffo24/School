@@ -17,17 +17,17 @@ var fs = require('fs');
 
 //starts parser
     app.use(myParser.urlencoded({ extended: true }));
-//global variable to recall back the function
+//global variable to recall back the function to display the array after running through validation
 var stringified ={}
 //Route to handle any request; also calls next
 app.all('*', function (request, response, next) {
     console.log (request.method + ' to path ' + request.path);
     next();
 });
-
+//global variable to recall the quantities from products.display page
 var PermQuantities= {}
 
-//processes the form
+//processes the form takes the /POST from products_display.html
 app.post("/process_form", function (request, response) {
     let POST = request.body;
     PermQuantities = POST
@@ -132,7 +132,7 @@ app.post("/loginform", function (request, response){
      
    
 
-//to verify a existing user and login
+//to verify a existing user and login taken from FILE/IO lab and modified
 if(typeof user_data[user_name] != 'undefined'){
     if((user_data[user_name].password == user_pass)== true){
         console.log(user_name + " Logged in");
@@ -157,7 +157,7 @@ if(typeof user_data[user_name] != 'undefined'){
         }
 console.log(PermQuantities)
 });
-//reads and writes the register.view / register page
+//reads and writes the register.view /register page
 app.get("/register", function (request, response) {
     console.log(PermQuantities)
     var registerview = fs.readFileSync('./public/register.view', 'utf-8');
@@ -190,6 +190,7 @@ if(typeof user_data[user_name] != 'undefined')
     }else{ 
     UsernameExist = true
     }  
+//uses function below to validate username for register page
 if(!validateUsername(user_name)){
     response.send(`<script>
     alert("Username: ${user_name} Needs to be no less than 5 characters and must exceed 15 characters"); 
@@ -199,6 +200,7 @@ if(!validateUsername(user_name)){
     }else{
     var validusername= true
 }
+//uses function below to validate fullname for regeister page
 if(!validatefullname(new_user_fullname)){
     response.send(`<script>
     alert("Fullname: ${new_user_fullname} Must between 0 and 30 characters following the prompt Last Name, First Name"); 
@@ -208,6 +210,7 @@ if(!validatefullname(new_user_fullname)){
     }else{
     var validfullname = true
 }
+//uses function below to validate email for register page
 if(!validateEmail(new_user_email)){
     response.send(`<script>
     alert("Email: ${new_user_email} Must follow the example jimmie@gmail.com or jimmie@hotmail.al"); 
@@ -217,6 +220,7 @@ if(!validateEmail(new_user_email)){
     }else{
     var validemail=true
 }
+//validates if first password matches with the confirmation password in register page
 if(new_user_password != new_user_password_rpt){
     response.send(`<script>
     alert("Passwords do not match please make sure and re-confirm that passwords match"); 
@@ -267,7 +271,7 @@ function validateEmail(email) {//used =@ and +\. to seperate sections of email
     return re.test(String(email).toLowerCase());
 }
 
-//Taken from Assignment 1 example. 
+//Taken from Assignment 1 example. and modified
 function display_invoice_table_rows() {
 
     subtotal = 0;
