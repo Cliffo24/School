@@ -48,8 +48,8 @@ app.post("/process_form", function (request, response) {
     if(totalquantities != "undefined")
     {
 
-// }
-    //To Check if it is a posive number
+
+//To Check if it is a posive number
     if(0>objarray[i])
     {
     return response.send(`<script>
@@ -65,7 +65,7 @@ app.post("/process_form", function (request, response) {
           // window.history.back();
         // </script>`);
     // }
-    //To Check if it is a valid number
+//To Check if it is a valid number
     if(Number(objarray[i])!=objarray[i])
     {
     return response.send(`<script>
@@ -75,7 +75,7 @@ app.post("/process_form", function (request, response) {
         </script>`);
     }
    
-    //if it ends true meaning if all the validation is right 
+//if it ends true meaning if all the validation is right 
     else
         {
         result=true
@@ -188,7 +188,7 @@ if(typeof user_data[user_name] != 'undefined')
         </script>`);
     console.log("Username Exist")
     }else{ 
-    var UsernameExist = true
+        var UsernameExist = true
     }  
 //uses function below to validate username for register page
 if(!validateUsername(user_name)){
@@ -198,7 +198,7 @@ if(!validateUsername(user_name)){
     
     </script>`);
     }else{
-    var validusername= true
+        var validusername= true
 }
 //uses function below to validate fullname for regeister page
 if(!validatefullname(new_user_fullname)){
@@ -208,7 +208,7 @@ if(!validatefullname(new_user_fullname)){
     
     </script>`);
     }else{
-    var validfullname = true
+        var validfullname = true
 }
 //uses function below to validate email for register page
 if(!validateEmail(new_user_email)){
@@ -218,7 +218,7 @@ if(!validateEmail(new_user_email)){
     
     </script>`);
     }else{
-    var validemail=true
+        var validemail=true
 }
 //validates if first password matches with the confirmation password in register page
 if(new_user_password != new_user_password_rpt){
@@ -227,7 +227,7 @@ if(new_user_password != new_user_password_rpt){
     window.history.back();
     </script>`);
     }else{
-    var passwordmatch= true
+        var passwordmatch= true
 }
 console.log("REGISTRATION COMPLETE")
 //if it all checks to be true it will write the new user data into user_data.json taken from File/IO Lab and modified 
@@ -245,13 +245,10 @@ if(UsernameExist && validusername && validfullname && validemail &&passwordmatch
     fs.writeFileSync(user_data_filename, data, "utf-8");
     var invoiceview = fs.readFileSync('./public/invoice.view', 'utf-8');
     response.send(eval('`' + invoiceview + '`'));
-    }else{
-        response.redirect("/register")
+        }else{
+            response.redirect("/register")
     }
 
-
-        
-    
 });
 
 
@@ -307,11 +304,11 @@ function display_invoice_table_rows() {
 if (subtotal <= 1000) {
         shipping = 50;
     }
- else if (subtotal <= 2000) {
-    shipping = 100;
+    else if (subtotal <= 2000) {
+        shipping = 100;
     }
- else {
-    shipping = 0.10 * subtotal;
+    else {
+        shipping = 0.10 * subtotal;
     }
 
     // Compute grand total
