@@ -96,14 +96,14 @@ app.post("/process_form", function (request, response) {
 });
 
 
-//to read user files, taken from lab 14 and modified
+//to read user files, taken from lab 14 and modified, load user.json
 if (fs.existsSync(user_data_filename)) 
     {
     data = fs.readFileSync(user_data_filename, 'utf-8');
 //parse the json file to convert into object/array
     user_data = JSON.parse(data);
     console.log("User_data=", user_data);
-//to look at the size of the json file
+//to log the size of the json file, the amount of characters in the file
     fileStats = fs.statSync(user_data_filename);
     console.log("File " + user_data_filename + " has " + fileStats.size + " characters");
     }    
@@ -136,9 +136,9 @@ app.post("/loginform", function (request, response){
 if(typeof user_data[user_name] != 'undefined'){
     if((user_data[user_name].password == user_pass)== true){
         console.log(user_name + " Logged in");
-     
-//if it is verified positively it would redirect to invoice 
+//if it is verified positively it would redirect to invoice
     var invoiceview = fs.readFileSync('./public/invoice.view', 'utf-8');
+//load the template
     response.send(eval('`' + invoiceview + '`'));
 }   else{ 
     response.send(`<script>
@@ -242,7 +242,9 @@ if(UsernameExist && validusername && validfullname && validemail &&passwordmatch
 
 
     data = JSON.stringify(user_data);
+//load the user_data.json file to prepare to write the register data after validation
     fs.writeFileSync(user_data_filename, data, "utf-8");
+//after it redirects to invoice to show the invoice after registration
     var invoiceview = fs.readFileSync('./public/invoice.view', 'utf-8');
     response.send(eval('`' + invoiceview + '`'));
         }else{
@@ -311,7 +313,7 @@ if (subtotal <= 1000) {
         shipping = 0.10 * subtotal;
     }
 
-    // Compute grand total
+// Compute grand total
     total = subtotal + tax + shipping;
 
     return str;
