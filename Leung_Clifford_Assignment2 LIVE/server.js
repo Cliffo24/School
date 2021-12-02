@@ -63,9 +63,9 @@ app.post("/process_form", function (request, response) {
      //if(parseInt(objarray[i]) != (objarray[i])){        
         //return response.send(`<script>
           //alert("Please enter a whole number"); 
-           //window.history.back();
+          // window.history.back();
         // </script>`);
-   // }
+    // }
     //To Check if it is a valid number
     if(Number(objarray[i])!=objarray[i])
     {
