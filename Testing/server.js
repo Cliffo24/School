@@ -13,12 +13,13 @@ var fs = require('fs');
     const { stringify } = require('query-string');
 //require data from products_data.js
     var products = require('./public/products_data.js'); 
-    const {response} = require ('express');
-const { getMaxListeners } = require('process');
+
+    
+    
 
 //starts parser
     app.use(myParser.urlencoded({ extended: true }));
-
+//global variable to recall back the function
     var stringified
 //Route to handle any request; also calls next
 app.all('*', function (request, response, next) {
@@ -130,7 +131,7 @@ app.post("/loginform", function (request, response){
     user_name = POST["username"];
     user_pass = POST["password"];
     console.log(POST)
-    
+     
    
 
 //to verify a existing user and login
@@ -178,7 +179,7 @@ app.post("/registernew", function (request, response){
 
  console.log(new_user_fullname)
     
-
+//register validation 
 if(typeof user_data[user_name] != 'undefined')
 {
     response.send(`<script>
@@ -226,6 +227,7 @@ if(new_user_password != new_user_password_rpt){
         var passwordmatch= true
 }
 console.log("REGISTRATION COMPLETE")
+//if it all checks to be true it will write the new user data into user_data.json and redirect
 if(UsernameExist && validusername && validfullname && validemail &&passwordmatch){
     
     user_data[user_name] ={}
@@ -234,12 +236,13 @@ if(UsernameExist && validusername && validfullname && validemail &&passwordmatch
     user_data[user_name].password = POST["password"]
     user_data[user_name].passwordrpt = POST["passwordrpt"]
 
-   
+
+
     data = JSON.stringify(user_data);
     fs.writeFileSync(user_data_filename, data, "utf-8");
-    response.redirect("/login" +stringified)
+    response.redirect("/login")
     }else{
-        response.redirect("/register" +stringified)
+        response.redirect("/register")
     }
 
 
