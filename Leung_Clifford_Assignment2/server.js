@@ -1,5 +1,5 @@
 //Copied from info server ex5 and part of lab 14
-var fs = require('fs');
+    var fs = require('fs');
 // require express
     var express = require('express');
 //require express
