@@ -19,7 +19,7 @@ var fs = require('fs');
 //starts parser
     app.use(myParser.urlencoded({ extended: true }));
 //global variable to recall back the function to display the array after running through validation because this wasn't running I made another global variable at the bottom
-var stringified ={}
+    var stringified ={}
 //Route to handle any request; also calls next
 app.all('*', function (request, response, next) {
     console.log (request.method + ' to path ' + request.path);
@@ -76,7 +76,7 @@ app.post("/process_form", function (request, response) {
         </script>`);
     }
    
-    //if it ends true meaning if all the validation is right it goes redirects to invoice which calculates the invoice
+    //if it ends true meaning if all the validation is right it goes redirects to login page with querystring 
     else
         {
         result=true
@@ -272,7 +272,7 @@ function validateEmail(email) {//used =@ and +\. to seperate sections of email
     return re.test(String(email).toLowerCase());
 }
 
-//Taken from Assignment 1 example. and modified
+//Taken from Assignment 1 example. and modified, will be used to for invoice.view to take all the values gathered from products.html and print out the values into the invoice
 function display_invoice_table_rows() {
 
     subtotal = 0;
