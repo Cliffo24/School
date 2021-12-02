@@ -10,7 +10,6 @@ var fs = require('fs');
     var user_data_filename = "./user_data.json"; 
 //require querystring
     var queryString = require("query-string") 
-    const { stringify } = require('query-string');
 //require data from products_data.js /loading it
     var data = require('./public/products_data.js'); 
 //Code from bottom of product_data.js
