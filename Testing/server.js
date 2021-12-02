@@ -48,7 +48,6 @@ app.post("/process_form", function (request, response) {
 // Check if it is non-negative
     var initialquantites= objarray[i]
     var totalquantities= totalquantities+initialquantites
-        console.log((parseInt(objarray[i])!=parseFloat(objarray[i])))
     if(totalquantities != "undefined")
     {
 
@@ -63,10 +62,10 @@ app.post("/process_form", function (request, response) {
          </script>`);
     }
      //To check if it is a whole number but code did not work so I did not include
-    // if(parseInt(objarray[i]) != (objarray[i])){        
-       // return response.send(`<script>
-         //  alert("Please enter a whole number"); 
-          // window.history.back();
+     //if(parseInt(objarray[i]) != (objarray[i])){        
+        //return response.send(`<script>
+          //alert("Please enter a whole number"); 
+           //window.history.back();
         // </script>`);
    // }
     //To Check if it is a valid number
@@ -86,7 +85,7 @@ app.post("/process_form", function (request, response) {
         }
     }
         }    
-     stringified = queryString.stringify(POST);
+    var stringified = queryString.stringify(POST);
 //if the results =true it would redirect to invoice but if it fails validation it pops up error and redirects to display page
     if(result==true){
         response.redirect("./login?"+ stringified)
@@ -154,7 +153,7 @@ if(typeof user_data[user_name] != 'undefined'){
                 alert("Username entered is wrong"); 
                 window.history.back();
                 
-         </script>`);
+            </script>`);
         }
 
 });
@@ -168,42 +167,95 @@ app.post("/registernew", function (request, response){
     console.log("got a new register")
     POST = request.body;
   
-//getting the user info from the /register page
-    var user_name = POST["username"];
+//getting the user info from the /register page and putting it into variables for validation. put username and email to lower case to prevent identical copies from forming
+    var user_name = POST["username"].toLowerCase();
     var new_user_password = POST["password"];
     var new_user_password_rpt = POST["passwordrpt"];
     var new_user_email = POST["email"].toLowerCase();
     var new_user_fullname = POST["fullname"];
     console.log(POST)
+    
 
-//putting user POST into variables to help write the data into the user_data.json
-    user_data[user_name] = {};
-    user_data[user_name].fullname = new_user_fullname;
-    user_data[user_name].email = new_user_email;
-    user_data[user_name].password = new_user_password;
-    user_data[user_name].passwordrpt = new_user_password_rpt;
-
- 
+ console.log(new_user_fullname)
     
 
 if(typeof user_data[user_name] != 'undefined')
 {
     response.send(`<script>
-        alert("Username: ${user_name} exists"); 
+        alert("Username: ${user_name} exists please enter another username"); 
         window.history.back();
         
         </script>`);
     console.log("Username Exist")
-}   else{ 
-    UsernameValid = true
-    }   
+    }else{ 
+    UsernameExist = true
+    }  
+if(!validateUsername(user_name)){
+    response.send(`<script>
+    alert("Username: ${user_name} Needs to be no less than 5 characters and must exceed 15 characters"); 
+    window.history.back();
     
+    </script>`);
+    }else{
+    var validusername= true
+}
+if(!validatefullname(new_user_fullname)){
+    response.send(`<script>
+    alert("Fullname: ${new_user_fullname} Must between 0 and 30 characters following the prompt Last Name, First Name"); 
+    window.history.back();
+    
+    </script>`);
+    }else{
+    var validfullname = true
+}
+if(!validateEmail(new_user_email)){
+    response.send(`<script>
+    alert("Email: ${new_user_email} Must follow the example jimmie@gmail.com or jimmie@hotmail.al"); 
+    window.history.back();
+    
+    </script>`);
+    }else{
+    var validemail=true
+}
+if(new_user_password != new_user_password_rpt){
+    response.send(`<script>
+    alert("Passwords do not match please make sure and re-confirm that passwords match"); 
+    window.history.back();
+    </script>`);
+    }else{
+        var passwordmatch= true
+}
+console.log("REGISTRATION COMPLETE")
+if(UsernameExist && validusername && validfullname && validemail &&passwordmatch){
+    
+    user_data[user_name] ={}
+    user_data[user_name].fullname = POST["fullname"]
+    user_data[user_name].email = POST["email"]
+    user_data[user_name].password = POST["password"]
+    user_data[user_name].passwordrpt = POST["passwordrpt"]
 
+   
     data = JSON.stringify(user_data);
     fs.writeFileSync(user_data_filename, data, "utf-8");
+    response.redirect("/login" +stringified)
+    }else{
+        response.redirect("/register" +stringified)
+    }
+
+
+        
     
 });
+//Validation functions taken from the Internet in order to validate username characters, full name characters, valid email.
+function validateUsername(user) {
+    const re = /^[a-zA-Z0-9]{5,15}$/;
+    return re.test(String(user).toLowerCase());
+}
 
+function validatefullname(fullname){
+    const re = /^[ +a-zA-Z,]{0,30}$/
+    return re.test(String(fullname));
+}
 
 function validateEmail(email) {//used =@ and +\. to seperate sections of email
     const re = /^[a-zA-Z0-9._]+@[a-zA-Z0-9.]+\.[a-z]{2,3}$/;
