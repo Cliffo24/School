@@ -35,7 +35,7 @@
                     <td width="54%">$${subtotal.toFixed(2)}</td>
                   </tr>
                   <tr>
-                    <td  colspan="3" width="67%"><span>Tax at %</span></td>
+                    <td  colspan="3" width="67%"><span>Tax at (4.71%)</span></td>
                     <td width="54%">$${tax.toFixed(2)}</td>
                   </tr>
                   <tr>
