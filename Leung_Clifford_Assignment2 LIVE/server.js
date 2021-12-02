@@ -75,7 +75,7 @@ app.post("/process_form", function (request, response) {
         </script>`);
     }
    
-    //if it ends true meaning if all the validation is right it goes redirects to login page with querystring 
+    //if it ends true meaning if all the validation is right 
     else
         {
         result=true
@@ -84,7 +84,7 @@ app.post("/process_form", function (request, response) {
         }    
     stringified = queryString.stringify(POST);
  
-//if the results =true it would redirect to invoice but if it fails validation it pops up error and redirects to display page
+//if the results =true it would redirect to login but if it fails validation it pops up error and redirects to display page
     if(result==true){
         response.redirect("./login?"+ stringified)
     }
@@ -121,7 +121,7 @@ app.get("/login", function (request, response){
     
 });
 //taken form File I/O Lab and modified
-//take the information from login page and post it to the login form
+//redirected from login page and POST the username and login to verify in the next steps
 app.post("/loginform", function (request, response){
     console.log(PermQuantities)
     console.log("got a post")
@@ -137,7 +137,7 @@ if(typeof user_data[user_name] != 'undefined'){
     if((user_data[user_name].password == user_pass)== true){
         console.log(user_name + " Logged in");
      
-//if it is verified it would redirect to invoice with the quantities
+//if it is verified positively it would redirect to invoice 
     var invoiceview = fs.readFileSync('./public/invoice.view', 'utf-8');
     response.send(eval('`' + invoiceview + '`'));
 }   else{ 
@@ -188,7 +188,7 @@ if(typeof user_data[user_name] != 'undefined')
         </script>`);
     console.log("Username Exist")
     }else{ 
-    UsernameExist = true
+    var UsernameExist = true
     }  
 //uses function below to validate username for register page
 if(!validateUsername(user_name)){
@@ -227,7 +227,7 @@ if(new_user_password != new_user_password_rpt){
     window.history.back();
     </script>`);
     }else{
-        var passwordmatch= true
+    var passwordmatch= true
 }
 console.log("REGISTRATION COMPLETE")
 //if it all checks to be true it will write the new user data into user_data.json
