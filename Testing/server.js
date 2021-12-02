@@ -15,31 +15,26 @@ var fs = require('fs');
     var products = require('./public/products_data.js'); 
 
     
-    
 
 //starts parser
     app.use(myParser.urlencoded({ extended: true }));
 //global variable to recall back the function
-    var stringified
+var stringified ={}
 //Route to handle any request; also calls next
 app.all('*', function (request, response, next) {
     console.log (request.method + ' to path ' + request.path);
     next();
 });
 
-
-//Keep values from POST
-    var PermQuantities = {};
+    
 
 //processes the form
 app.post("/process_form", function (request, response) {
     let POST = request.body;
     const objarray= Object.values(POST)
          console.log(POST)
-//Use to recall this function in invoice      
-    PermQuantities=POST 
-//validation
     
+//validation
 //checks if quantities are defined in each textbox
 //start with result being false
     var result= false 
@@ -86,7 +81,8 @@ app.post("/process_form", function (request, response) {
         }
     }
         }    
-    var stringified = queryString.stringify(POST);
+    stringified = queryString.stringify(POST);
+        console.log(stringified)
 //if the results =true it would redirect to invoice but if it fails validation it pops up error and redirects to display page
     if(result==true){
         response.redirect("./login?"+ stringified)
@@ -140,7 +136,8 @@ if(typeof user_data[user_name] != 'undefined'){
         console.log(user_name + " Logged in");
      
 //if it is verified it would redirect to invoice with the quantities
-    response.redirect("./invoice.html?" + stringified + queryString.stringify(POST) )
+    var invoiceview = fs.readFileSync('./public/invoice.view', 'utf-8');
+    response.send(eval('`' + invoiceview + '`'));
 }   else{ 
     response.send(`<script>
         alert("Password entered is wrong"); 
@@ -156,10 +153,11 @@ if(typeof user_data[user_name] != 'undefined'){
                 
             </script>`);
         }
-
+console.log(PermQuantities)
 });
 //reads and writes the register.view / register page
 app.get("/register", function (request, response) {
+    console.log(PermQuantities)
     var registerview = fs.readFileSync('./public/register.view', 'utf-8');
     response.send(eval('`' + registerview + '`'));
 });
@@ -167,7 +165,6 @@ app.get("/register", function (request, response) {
 app.post("/registernew", function (request, response){
     console.log("got a new register")
     POST = request.body;
-  
 //getting the user info from the /register page and putting it into variables for validation. put username and email to lower case to prevent identical copies from forming
     var user_name = POST["username"].toLowerCase();
     var new_user_password = POST["password"];
@@ -227,7 +224,7 @@ if(new_user_password != new_user_password_rpt){
         var passwordmatch= true
 }
 console.log("REGISTRATION COMPLETE")
-//if it all checks to be true it will write the new user data into user_data.json and redirect
+//if it all checks to be true it will write the new user data into user_data.json
 if(UsernameExist && validusername && validfullname && validemail &&passwordmatch){
     
     user_data[user_name] ={}
@@ -240,7 +237,8 @@ if(UsernameExist && validusername && validfullname && validemail &&passwordmatch
 
     data = JSON.stringify(user_data);
     fs.writeFileSync(user_data_filename, data, "utf-8");
-    response.redirect("/login")
+    var invoiceview = fs.readFileSync('./public/invoice.view', 'utf-8');
+    response.send(eval('`' + invoiceview + '`'));
     }else{
         response.redirect("/register")
     }
@@ -249,6 +247,8 @@ if(UsernameExist && validusername && validfullname && validemail &&passwordmatch
         
     
 });
+
+
 //Validation functions taken from the Internet in order to validate username characters, full name characters, valid email.
 function validateUsername(user) {
     const re = /^[a-zA-Z0-9]{5,15}$/;
@@ -265,6 +265,44 @@ function validateEmail(email) {//used =@ and +\. to seperate sections of email
     return re.test(String(email).toLowerCase());
 }
 
+function display_invoice(){
+    subtotal = 0
+    str =``;
+for (i = 0; i < products.length; i++) {
+    a_qty=0
+    if (typeof PermQuantities[`quantity${i}`] != undefined) {
+        a_qty = PermQuantities[`quantity${i}`];
+    }
+    if (a_qty > 0) {
+// product row
+    extended_price = a_qty * products[i].price
+    subtotal += extended_price;
+//Compute Tax
+  tax_rate = 0.0471;
+  tax = tax_rate * subtotal;
+  
+//Compute Shipping
+    if (subtotal <= 1000) {
+        shipping = 50;
+    } else if (subtotal <= 2000) {
+        shipping = 100;
+    } else {
+        shipping = 0.10 * subtotal;
+        }
+        //Compute Total
+        total = subtotal + tax + shipping;
+
+}
+    str +=(`
+        <tr>
+        <td style="text-align: left;" width="40%">${products[i].model}</td>
+        <td width="20%">${quantities[i]}</td>
+        <td width="20%">\$${products[i].price}</td>
+        <td width="20%">\$${extended_price}</td>
+        </tr>
+        `);
+    }
+}  
 
 
 
