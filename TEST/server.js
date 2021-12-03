@@ -228,7 +228,7 @@ if(new_user_password != new_user_password_rpt){
     </script>`);
     }else{
         var passwordmatch= true
-}
+    }
 console.log("REGISTRATION COMPLETE")
 //if it all checks to be true it will write the new user data into user_data.json taken from File/IO Lab and modified 
 if(UsernameExist && validusername && validfullname && validemail &&passwordmatch){
