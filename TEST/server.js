@@ -12,6 +12,7 @@
     var queryString = require("query-string") 
 //require data from products_data.js /loading it
     var data = require('./public/products_data.js'); 
+const { response } = require('express');
 //Code from bottom of product_data.js
     var products = data.products; 
 
@@ -58,13 +59,13 @@ app.post("/process_form", function (request, response) {
                 
          </script>`);
     }
-     //To check if it is a whole number but code did not work so I did not include
-     //if(parseInt(objarray[i]) != (objarray[i])){        
-        //return response.send(`<script>
-          //alert("Please enter a whole number"); 
-          // window.history.back();
-        // </script>`);
-    // }
+//To check if it is a whole number 
+    if(parseInt(Number(objarray[i])) != (objarray[i])){        
+        return response.send(`<script>
+        alert("Please enter a whole number"); 
+        window.history.back();
+        </script>`);
+    }
 //To Check if it is a valid number
     if(Number(objarray[i])!=objarray[i])
     {
@@ -80,6 +81,14 @@ app.post("/process_form", function (request, response) {
         {
         result=true
         }
+//if the purchase quantity amount exceeds the amount available it would send error
+    if(Number(objarray[i]) > products[i].quantity_available){
+        return response.send(`<script>
+        alert("Available Quantity Exceeded! please choose an amount within available quantity"); 
+        window.history.back();
+                    
+        </script>`);
+    }
     }
         }    
     stringified = queryString.stringify(POST);
