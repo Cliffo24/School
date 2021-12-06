@@ -58,13 +58,13 @@ app.post("/process_form", function (request, response) {
                 
          </script>`);
     }
-     //To check if it is a whole number but code did not work so I did not include
-     //if(parseInt(objarray[i]) != (objarray[i])){        
-        //return response.send(`<script>
-          //alert("Please enter a whole number"); 
-          // window.history.back();
-        // </script>`);
-    // }
+//To check if it is a whole number 
+    if(parseInt(Number(objarray[i])) != (objarray[i])){        
+        return response.send(`<script>
+        alert("Please enter a whole number"); 
+        window.history.back();
+        </script>`);
+    }
 //To Check if it is a valid number
     if(Number(objarray[i])!=objarray[i])
     {
