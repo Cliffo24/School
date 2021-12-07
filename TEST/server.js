@@ -29,6 +29,16 @@ app.all('*', function (request, response, next) {
 //global variable to recall the quantities from products.display page
 var PermQuantities= {}
 
+//gets product information and loads it later (Assignment 3 example)
+app.post("/get_products_data", function(request, response){
+    products_data = products
+    response.json(products);
+});
+//gets user information and loads it later taken from (Assignment 3 example)
+app.post("/user_data", function (request, response) { 
+    response.json(user_data);
+});
+
 //processes the form takes the /POST from products_display.html
 app.post("/process_form", function (request, response) {
     let POST = request.body;
