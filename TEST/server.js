@@ -11,8 +11,9 @@
 //require querystring
     var queryString = require("query-string") 
 //require data from products_data.js /loading it
-    var data = require('./public/products_data.js'); 
-const { response } = require('express');
+    var data = require('./public/products_data.json'); 
+    var nodemailer = require(`nodemailer`)
+    const cookieParser = require('cookie-parser');
 //Code from bottom of product_data.js
     var products = data.products; 
 
