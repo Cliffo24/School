@@ -16,7 +16,7 @@
   // get the query string
   var products_data;
   var total = 0;
-  loadJSON('get_products_data', function (response) {
+  loadJSON("products_data", function (response) {
       // Parsing JSON string into object
       products_data = JSON.parse(response);
   });
@@ -33,6 +33,7 @@
       // Parsing JSON string into object
       user_reg_data = JSON.parse(response);
   });
+  
 
   // get the query string
   let params = (new URL(document.location)).searchParams;
@@ -85,7 +86,18 @@
           <img src="./images/${products[i].image}">      
           </section>`)
   }      
-  
+  var order_str = '';
+    // get the particular products to display
+    products = products_data[this_product_key];
+    console.log(products_data[products])
+    if (params.has('Submit')) {
+        // grab the quantities from the query string
+        order_str = 'Your order is:<br>';
+        for (i = 0; i < products.length; i++) {
+            order_str += `You want ${params.get(`quantities[${i}]`)} of ${products[i]['name']}<br>`;
+        }
+      }
+           document.write(order_str);
    </script>
     </div>
     <input type ="submit"  id="submit_purchase"> 
