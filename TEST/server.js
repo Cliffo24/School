@@ -14,7 +14,6 @@
     var products = require('./public/products_data.json'); 
     var nodemailer = require(`nodemailer`)
     const cookieParser = require('cookie-parser');
-//Code from bottom of product_data.js
 
 
 //starts parser
