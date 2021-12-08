@@ -43,19 +43,8 @@
       window.location.href = "./index.html";
   }
 </script>
-
-
-<!-- Image header taken from w3schools --> 
-  <div class="w3-display-container w3-container">
-    <img src="/images/3080.jpg" alt="Graphic Cards" style="width:100%">
-    <div class="w3-display-topleft w3-text-white" style="padding:24px 48px">
-      <h1 class="w3-jumbo w3-hide-small">New arrivals</h1>
-      <h1 class="w3-hide-large w3-hide-medium">New arrivals</h1>
-      <p><a href="#products" class="w3-button w3-black w3-padding-large w3-large">SHOP NOW</a></p>
-    </div>
-  </div>
-  <!-- Nav Bar taken from W3SCHOOLS -->
-  <div class="navbar">
+ <!-- Nav Bar taken from W3SCHOOLS -->
+  <div class="navbar" id = "navbar">
     <a href="index.html">Home</a>
     <a href="/login">Login/Register</a>
     <div class="dropdown">
@@ -68,39 +57,40 @@
       </script>
       </div>
     </div> 
-  </div>
-  
-  <form name = "product_main_display" action="/process_form" method="POST">
-    <div class="w3-container w3-text-grey" id="products">
-      <p>6 items</p>
-      <h1>RTX 30 Series Graphic Card Models</h1>
-      <script>
-        //Using master array to make the products display which also put in input for the amount I would want to purchase this includes adding a purhcase button on the bottom.
-    for(i= 0; i <products.length; i++) {
-      document.write(`<section class = "item">
-          <h2>${products[i].model}</h2>
-          <p>$${products[i].price}</p>
-          <label id="quantity${i}_label">Quantity:</label>
-          <b>${products[i].quantity_available}</b>
-          <input type="text" placeholder="0" name="quantity${i}">
-          <img src="./images/${products[i].image}">      
-          </section>`)
-  }      
-  var order_str = '';
-    // get the particular products to display
-    products = products_data[this_product_key];
-    console.log(products_data[products])
-    if (params.has('Submit')) {
-        // grab the quantities from the query string
-        order_str = 'Your order is:<br>';
-        for (i = 0; i < products.length; i++) {
-            order_str += `You want ${params.get(`quantities[${i}]`)} of ${products[i]['name']}<br>`;
-        }
-      }
-           document.write(order_str);
-   </script>
+  </div> 
+
+<!-- Image header taken from w3schools --> 
+  <div class="w3-display-container w3-container">
+    <img src="/images/3080.jpg" alt="Graphic Cards" style="width:100%">
+    <div class="w3-display-topleft w3-text-white" style="padding:24px 48px">
+      <h1 class="w3-jumbo w3-hide-small">New arrivals</h1>
+      <h1 class="w3-hide-large w3-hide-medium">New arrivals</h1>
+      <p><a href="#navbar" class="w3-button w3-black w3-padding-large w3-large">SHOP NOW</a></p>
     </div>
-    <input type ="submit"  id="submit_purchase"> 
-    </form>
+  </div>
+ 
+  <script>
+  //displays product informaiton depending on which page they are on
+  var order_str = '';
+
+  order_str += `
+  <INPUT TYPE="HIDDEN" NAME="products_key" VALUE="${this_product_key}">`;
+  products = products_data[this_product_key];
+  for (i = 0; i < products.length; i++) {
+      order_str += `
+
+        <h2>${products[i]["model"]}</h2>
+        <p>${products[i]['price']}</p>
+        <label id="quantity${i}_label"}">Quantity</label>
+        <INPUT TYPE="text" placeholder="0" name="quantities[${i}]" value="">
+        <img class="displayimage"src="${products[i]["image"]}">
+
+        `;
+}
+
+// this closes the else for the form and table display
+document.write(order_str);
+</script>
+</div>
 </body>
 </html>
