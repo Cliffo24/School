@@ -1,0 +1,89 @@
+{
+  "GPUs":[
+{ 
+    "model":"Nvdia RTX 3080",  
+    "price": 820.00,  
+    "image": "3080.jpg",
+    "quantity_available": 100
+},
+{  
+    "model":"Nvdia RTX 3070",  
+    "price": 700.00,  
+    "image": "3070.jpg",
+    "quantity_available": 100
+},
+{  
+    "model":"Nvdia RTX 3060",  
+    "price": 650.00,  
+    "image": "3060.jpg",
+    "quantity_available": 100
+}
+  ],
+  "Mouses":[
+{
+    "model":"GPRO Wireless",  
+    "price": 60.00,  
+    "image": "gprowireless.jpg",
+    "quantity_available": 100
+},
+{
+    "model":"Model O Wireless",  
+    "price": 60.00,  
+    "image": "modelowireless.jpg",
+    "quantity_available": 100
+},
+{
+    "model":"HP Mouse",  
+    "price": 30.00,  
+    "image": "hpmouse.jpg",
+    "quantity_available": 100
+}
+  ],
+  "Headsets":[
+{
+    "model":"Earbuds",  
+    "price": 20.00,  
+    "image": "earbuds.jpg",
+    "quantity_available": 100
+},
+{
+    "model":"HyperX Headset",  
+    "price": 80.00,  
+    "image": "hyperx.jpg",
+    "quantity_available": 100
+},
+{
+    "model":"Razer Headset",  
+    "price": 100.00,  
+    "image": "razer.jpg",
+    "quantity_available": 100
+}
+  ],
+  "Keyboards":[
+{
+    "model":"Custom Made",  
+    "price": 300.00,  
+    "image": "custom.jpg",
+    "quantity_available": 100
+},
+{
+    "model":"Razer Widow",  
+    "price": 120.00,  
+    "image": "razerblackwidow.jpg",
+    "quantity_available": 100
+},
+{
+    "model":"HP Keyboard",  
+    "price": 50.00,  
+    "image": "hpkeyboard.jpg",
+    "quantity_available": 100
+}
+]
+
+}
+
+     
+    
+     
+
+  

@@ -1,0 +1,74 @@
+<head>
+    <script src="./functions.js"></script>
+    <script>
+        // get the query string
+        let params = (new URL(document.location)).searchParams;
+        if (params.has('products_key')) {
+            var this_product_key = params.get('products_key');
+        } else {
+            document.write('no products key in query string');
+            document.stop;
+        }
+
+        var products_data;
+        loadJSON('/get_products_data', function (response) {
+            // Parsing JSON string into object
+            products_data = JSON.parse(response);
+        });
+    </script>
+</head>
+<center>
+    <a href='index.html'>HOME<a>&nbsp&nbsp&nbsp;
+            <script>
+                nav_bar(this_product_key,products_data)
+
+                var username = (getCookie(username));
+
+                if(username != ``){
+                    document.write(`<a href='./logout>Logout ${username}<a>&nbsp&nbsp&nbsp;`);
+                }
+                else{
+                    document.write(`<a href="./Login">Login</a>`)
+                }
+            </script>
+    
+</center>
+
+<script>
+
+    // This function takes a string assumed to be a key in the products array above to display and select the corresponding products
+    var order_str = '';
+    // get the particular products to display
+    products = products_data[this_product_key];
+    console.log(products_data[products])
+    if (params.has('Submit')) {
+        // grab the quantities from the query string
+        order_str = 'Your order is:<br>';
+        for (i = 0; i < products.length; i++) {
+            order_str += `You want ${params.get(`quantities[${i}]`)} of ${products[i]['name']}<br>`;
+        }
+    } else {
+        var order_str = '';
+
+order_str += `
+<INPUT TYPE="HIDDEN" NAME="products_key" VALUE="${this_product_key}">`;
+products = products_data[this_product_key];
+  for (i = 0; i < products.length; i++) {
+    order_str += `
+
+      <h2>${products[i]["model"]}</h2>
+      <p>${products[i]['price']}</p>
+      <label id="quantity${i}_label"}">Quantity</label>
+      <INPUT TYPE="text" placeholder="0" name="quantities[${i}]" value="">
+      <img class="displayimage"src="${products[i]["image"]}">
+
+      `;
+}
+// this closes the else for the form and table display
+document.write(order_str);
+        order_str += `</TABLE><br>
+<INPUT TYPE="SUBMIT"  name="Submit" value="Select">
+</FORM>`;
+    } // this closes the else for the form and table display
+
+</script>
