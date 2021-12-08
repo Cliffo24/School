@@ -70,13 +70,13 @@
   </div>
  
   <script>
-  //displays product informaiton depending on which page they are on
+  //displays product information depending on which page they are on
   var order_str = '';
 
   order_str += `
   <INPUT TYPE="HIDDEN" NAME="products_key" VALUE="${this_product_key}">`;
   products = products_data[this_product_key];
-  for (i = 0; i < products.length; i++) {
+    for (i = 0; i < products.length; i++) {
       order_str += `
 
         <h2>${products[i]["model"]}</h2>
@@ -87,7 +87,6 @@
 
         `;
 }
-
 // this closes the else for the form and table display
 document.write(order_str);
 </script>
