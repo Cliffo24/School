@@ -68,9 +68,7 @@
       <p><a href="#navbar" class="w3-button w3-black w3-padding-large w3-large">SHOP NOW</a></p>
     </div>
   </div>
- 
   <script>
-    
   //displays product information depending on which page they are on
   var order_str = '';
 
@@ -81,7 +79,7 @@
       order_str += `
 
         <h2>${products[i]["model"]}</h2>
-        <p>${products[i]['price']}</p>
+        <p>${products[i]["price"]}</p>
         <label id="quantity${i}_label"}">Quantity</label>
         <INPUT TYPE="text" placeholder="0" name="quantities[${i}]" value="">
         <img class="displayimage"src="${products[i]["image"]}">
