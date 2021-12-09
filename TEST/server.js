@@ -25,8 +25,6 @@ app.all('*', function (request, response, next) {
     console.log (request.method + ' to path ' + request.path);
     next();
 });
-//global variable to recall the quantities from products.display page
-var PermQuantities= {}
 
 //gets product information and loads it later (Assignment 3 example)
 app.post("/get_products_data", function(request, response){
@@ -39,79 +37,18 @@ app.post("/user_data", function (request, response) {
 });
 
 //processes the form takes the /POST from products_display.html
-app.post("/process_form", function (request, response) {
-    let POST = request.body;
-    PermQuantities = POST
-    const objarray= Object.values(POST)
-    console.log(PermQuantities)
-    console.log(products.length)
-    
+app.get("/item_to_cart", function (request, response) {
+    var products_key = request.query['products_key']
+    var quantities = request.query['quantities'].map(Number)
+    console.log(quantities)
 //validation
+for(i in quantities){
+    if(isNonNegInt(quantities[i])){
+        request.session.cart[products_key] = quantities
+    }
+
+}
 //checks if quantities are defined in each textbox
-//start with result being false
-    var result= false 
-    for(i = 0; i < objarray.length; i++)
-    {   
-            
-// Check if it is non-negative
-    var initialquantites= objarray[i]
-    var totalquantities= totalquantities+initialquantites
-    if(totalquantities != "undefined")
-    {
-
-
-//To Check if it is a posive number
-    if(0>objarray[i])
-    {
-    return response.send(`<script>
-        alert("Please enter a positive number"); 
-        window.history.back();
-                
-         </script>`);
-    }
-//To check if it is a whole number 
-    if(parseInt(Number(objarray[i])) != (objarray[i])){        
-        return response.send(`<script>
-        alert("Please enter a whole number"); 
-        window.history.back();
-        </script>`);
-    }
-//To Check if it is a valid number
-    if(Number(objarray[i])!=objarray[i])
-    {
-    return response.send(`<script>
-        alert("Please enter a valid number"); 
-        window.history.back();
-                    
-        </script>`);
-    }
-   
-//if it ends true meaning if all the validation is right 
-    else
-        {
-        result=true
-        }
-//if the purchase quantity amount exceeds the amount available it would send error
-    if(Number(objarray[i]) > products[i].quantity_available){
-        return response.send(`<script>
-        alert("Available Quantity Exceeded! please choose an amount within available quantity"); 
-        window.history.back();
-                    
-        </script>`);
-    }
-    }
-        }    
-    stringified = queryString.stringify(POST);
- 
-//if the results =true it would redirect to login but if it fails validation it pops up error and redirects to display page
-    if(result==true){
-        response.redirect("./login?"+ stringified)
-    }
-    else{
-        alert("Enter valid quantity")
-        response.redirect("./products_display.html?" + stringified)
-        
-    }
 });
 
 
@@ -287,6 +224,16 @@ function validatefullname(fullname){
 function validateEmail(email) {//used =@ and +\. to seperate sections of email
     const re = /^[a-zA-Z0-9._]+@[a-zA-Z0-9.]+\.[a-z]{2,3}$/;
     return re.test(String(email).toLowerCase());
+}
+ //From Lab 12 from Assignment Example for validation
+ function isNonNegInt(q, return_errors = false) {
+    errors = []; // assume no errors at first
+    if (q == '') q = 0; // handle blank inputs as if they are 0
+    if (Number(q) != q) errors.push('<font color="red">Not a number!</font>'); // Check if string is a number value
+    else if (q < 0) errors.push('<font color="red">Negative value!</font>'); // Check if it is non-negative
+    else if (parseInt(q) != q) errors.push('<font color="red">Not an integer!</font>'); // Check that it is an integer
+    else if (q > products[i].quantity_available - products[i]["total_sold"]) errors.push('<font color="red">Over quantity available!</font>'); //Check available quantity
+    return return_errors ? errors : (errors.length == 0);
 }
 
 //Taken from Assignment 1 example. and modified, will be used to for invoice.view to take all the values gathered from products.html and print out the values into the invoice

@@ -70,12 +70,14 @@
       <p><a href="#navbar" class="w3-button w3-black w3-padding-large w3-large">SHOP NOW</a></p>
     </div>
   </div>
+  
+  <form action="./item_to_cart" name="products_key" method="GET">
+    
   <script>
   //displays product information depending on which page they are on
-
   var order_str = '';
-
   order_str += `
+  
   <INPUT TYPE="HIDDEN" NAME="products_key" VALUE="${this_product_key}">`;
   products = products_data[this_product_key];
     for (i = 0; i < products.length; i++) {
@@ -83,7 +85,7 @@
         <section class = "item">
         <h2>${products[i]["model"]}</h2>
         <p>$${products[i]["price"]}</p>
-        <label id="quantity${i}_label"}">Quantity Available : ${products[i]["quantity_available"]}</label>
+        <label id="quantity${i}_label"}">Quantity Available: ${products[i]["quantity_available"]}</label>
         <INPUT TYPE="text" placeholder="0" name="quantities[${i}]" value="">
         <img class="displayimage"src="${products[i]["image"]}">
 
@@ -93,6 +95,8 @@
 // this closes the else for the form and table display
 document.write(order_str);
 </script>
+<input type="submit" class="button" value="Add to Cart">
+</form>
 </div>
 </body>
 </html>
