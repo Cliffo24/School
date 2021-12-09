@@ -14,42 +14,66 @@
     var products = require('./public/products_data.json'); 
     var nodemailer = require(`nodemailer`)
     const cookieParser = require('cookie-parser');
+    var session = require('express-session')
+
 
 
 //starts parser
     app.use(myParser.urlencoded({ extended: true }));
+//taken from assignment 3
+    app.use(session({secret: `GPU Store`}))
 //global variable to recall back the function to display the array after running through validation because this wasn't running I made another global variable at the bottom
     var stringified ={}
 //Route to handle any request; also calls next
 app.all('*', function (request, response, next) {
     console.log (request.method + ' to path ' + request.path);
     next();
+    if(typeof request.session.cart == 'undefined') {request.session.cart = {};}
 });
 
-//gets product information and loads it later (Assignment 3 example)
+//gets product information and loads it later taken from Assignment 3 example
 app.post("/get_products_data", function(request, response){
     products_data = products
     response.json(products);
 });
-//gets user information and loads it later taken from (Assignment 3 example)
+//gets user information and loads it later taken from taken from Assignment 3 example
 app.post("/user_data", function (request, response) { 
     response.json(user_data);
 });
 
-//processes the form takes the /POST from products_display.html
+//processes the form takes the quantity, saves the quantity that was added into the cart taken from taken from Assignment 3 example and modified
 app.get("/item_to_cart", function (request, response) {
-    var products_key = request.query['products_key']
+    // get the product key sent from the form post
+    var products_key = request.query['products_key'] 
+    // Get quantities from the form post and convert strings from form post to numbers
     var quantities = request.query['quantities'].map(Number)
+    // store the quantities array in the session cart object with the same products_key. 
+    request.session.cart[products_key]= quantities;
     console.log(quantities)
+    response.redirect('./cart.html');
 //validation
 for(i in quantities){
     if(isNonNegInt(quantities[i])){
-        request.session.cart[products_key] = quantities
-    }
+        request.session.cart[products_key] = quantities 
+        return response.send(`
+            <script> Alert('${quantities.reduce((a, b) => a + b, 0)} items on the page is in cart");
+            window.history.back();
+             </script>`);
+    }else{
+        response.send(`<script> Alert("Entered Invalid Quantity");
+            window.history.back();
+            </script>`);
+        }
 
-}
-//checks if quantities are defined in each textbox
+    }
 });
+
+//getting the information held in the cart and recalling it to display taken from Assignment 3 example 
+app.post("/get_cart", function (request, response){
+    shopping_cart = (request.session.cart)
+    response.send(request.session.cart)
+});
+
 
 
 //to read user files, taken from lab 14 and modified, load user.json
@@ -79,7 +103,6 @@ app.get("/login", function (request, response){
 //taken form File I/O Lab and modified
 //redirected from login page and POST the username and login to verify in the next steps
 app.post("/loginform", function (request, response){
-    console.log(PermQuantities)
     console.log("got a post")
     POST = request.body;
     user_name = POST["username"];
@@ -209,6 +232,21 @@ if(UsernameExist && validusername && validfullname && validemail &&passwordmatch
 
 });
 
+//taken from assignment 3 
+app.get("/checkout", function (request, response) {
+    // Generate HTML invoice string
+      var invoice_str = `Thank you for your order!<table border><th>Quantity</th><th>Item</th>`;
+      var shopping_cart = request.session.cart;
+      for(product_key in products_data) {
+        for(i=0; i<products_data[product_key].length; i++) {
+            if(typeof shopping_cart[product_key] == 'undefined') continue;
+            qty = shopping_cart[product_key][i];
+            if(qty > 0) {
+              invoice_str += `<tr><td>${qty}</td><td>${products_data[product_key][i].name}</td><tr>`;
+            }
+        }
+    }
+});
 
 //Validation functions taken from the Internet in order to validate username characters, full name characters, valid email.
 function validateUsername(user) {
@@ -232,37 +270,35 @@ function validateEmail(email) {//used =@ and +\. to seperate sections of email
     if (Number(q) != q) errors.push('<font color="red">Not a number!</font>'); // Check if string is a number value
     else if (q < 0) errors.push('<font color="red">Negative value!</font>'); // Check if it is non-negative
     else if (parseInt(q) != q) errors.push('<font color="red">Not an integer!</font>'); // Check that it is an integer
-    else if (q > products[i].quantity_available - products[i]["total_sold"]) errors.push('<font color="red">Over quantity available!</font>'); //Check available quantity
     return return_errors ? errors : (errors.length == 0);
 }
 
 //Taken from Assignment 1 example. and modified, will be used to for invoice.view to take all the values gathered from products.html and print out the values into the invoice
 function display_invoice_table_rows() {
-
     subtotal = 0;
     str = '';
-    console.log(PermQuantities['quantity1'])
-    for (i = 0; i < products.length; i++) {
+    for (products_key in shopping_cart) {
         a_qty = 0;
-        if (typeof PermQuantities[`quantity${i}`] != undefined) {
-            a_qty = PermQuantities[`quantity${i}`];
-        }
-        if (a_qty > 0) {
-            // product row
-            extended_price = a_qty * products[i].price
-            subtotal += extended_price;
-            str += (`
+        for (i = 0; i < products_data[products_key].length; i++) {
+            if (shopping_cart[products_key][i] != undefined && shopping_cart[products_key][i] != 0) {
+                a_qty = shopping_cart[products_key][i]
+                if (a_qty > 0) {
+                    // product row
+                    extended_price = a_qty * products_data[products_key][i][`Price`]
+                    subtotal += extended_price;
+                    str += (`
       <tr>
-      <td style="text-align: left;" width="40%">${products[i].model}</td>
-      <td width="20%">${PermQuantities[`quantity${i}`]}</td>
-      <td width="20%">\$${products[i].price}</td>
-      <td width="20%">\$${extended_price}</td>
+        <td width="43%">${products_data[products_key][i]["model"]}</td>
+        <td align="center" width="11%">${shopping_cart[products_key][i]}</td>
+        <td align="center">\$${products_data[products_key][i]['price']}</td>
+        <td align="right">\$${extended_price.toFixed(2)}</td>
       </tr>
       `);
-      
+                }
+
+            }
         }
     }
-
 //Taken from Invoice Lab and modified
 // Compute tax
     tax_rate = 0.0471;

@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="products-style.css">
 <script src="./functions.js"></script>
 <script>
-  // get the query string
+  //load json files files taken from Assignment 3 example and modified
   var products_data;
   var total = 0;
   loadJSON("get_products_data", function (response) {
@@ -60,7 +60,6 @@
       </div>
   </div> 
 </div>
-
 <!-- Image header taken from w3schools --> 
   <div class="w3-display-container w3-container">
     <img src="/images/3080.jpg" alt="Graphic Cards" style="width:100%">
@@ -74,7 +73,7 @@
   <form action="./item_to_cart" name="products_key" method="GET">
     
   <script>
-  //displays product information depending on which page they are on
+  //displays product information depending on which page they are on taken from Assignment 3 Example and modified
   var order_str = '';
   order_str += `
   
@@ -95,7 +94,7 @@
 // this closes the else for the form and table display
 document.write(order_str);
 </script>
-<input type="submit" class="button" value="Add to Cart">
+<input type="submit" class="button" value="Add Items To Cart">
 </form>
 </div>
 </body>

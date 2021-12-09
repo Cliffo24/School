@@ -1,0 +1,96 @@
+<script>
+</script>
+<script>//template taken from W3Schools and modified</script>
+<!DOCTYPE html>
+<html>
+<title>Clifford's Products</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="products-style.css">
+
+<script src="./functions.js"></script>
+
+<script>
+  //load json files files taken from Assignment 3 example and modified
+  var products_data;
+  var total = 0;
+  loadJSON("get_products_data", function (response) {
+      // Parsing JSON string into object
+      products_data = JSON.parse(response);
+  });
+  console.log(products_data)
+  loadJSON('get_cart', function (response) {
+      // Parsing JSON string into object
+      shopping_cart = JSON.parse(response);
+      cart = response
+      for (pk in shopping_cart) {
+          total += shopping_cart[pk].reduce((a, b) => a + b);
+      }
+  });
+  loadJSON('user_data', function (response) {
+      // Parsing JSON string into object
+      user_reg_data = JSON.parse(response);
+  });
+  
+
+  // get the query string
+  let params = (new URL(document.location)).searchParams;
+  if (params.has('products_key')) {
+      var this_product_key = params.get('products_key');
+  } 
+</script>
+ <!-- Nav Bar taken from W3SCHOOLS -->
+  <div class="navbar" id = "navbar">
+    <a href="index.html">Home</a>
+    <div class="navbar-right">
+    <script>
+       var username = getCookie(`username`);
+          if (username == "") {
+            document.write(`
+                <a href="./login"></span>Login</a>
+                 `)
+          } else {
+            document.write(`
+              <a href="./logout"></span>Logout</a>
+                    `)
+  }
+    </script>
+    </div> 
+    <div class="dropdown">
+      <button class="dropbtn">Products
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+        <script>
+        nav_bar(this_product_key, products_data)
+      </script>
+       
+      </div>
+  </div> 
+</div>
+
+
+
+ <h1>Modify Cart</h1>
+  <script>
+  //displays product information depending on which page they are on taken from Assignment 3 Example and modified
+  var order_str = '';
+    for(products_key in shopping_cart){
+    order_str +=`<INPUT TYPE="HIDDEN" NAME="products_key" VALUE="${this_product_key}">`;
+  
+    }
+
+
+// this closes the else for the form and table display
+document.write(order_str);
+</script>
+<script></script>
+</script>
+
+</div>
+</body>
+</html>

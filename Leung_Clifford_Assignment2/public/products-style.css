@@ -60,7 +60,7 @@ section p {
     bottom: 50px;
     top: 90px;
 }
-
+/* equal height */
 .row {
-  display: flex; /* equal height of the children */
+  display: flex; 
 }

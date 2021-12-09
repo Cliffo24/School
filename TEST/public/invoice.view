@@ -12,6 +12,7 @@
 </head>
 <script>//creating table for invoice</script>
   <body>
+  
   <h1> <b>Welcome ${user_name} To Your Invoice<b> </h1>
     <table border="2">
         <tbody>
