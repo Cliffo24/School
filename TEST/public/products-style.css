@@ -69,6 +69,9 @@ section p {
   overflow: hidden;
   background-color: #333;
 }
+.navbar-right {
+  float: right;
+}
 
 .navbar a {
   float: left;
@@ -96,13 +99,14 @@ section p {
 }
 
 .navbar a:hover, .dropdown:hover .dropbtn {
-  background-color: red;
+  background-color: gray;
 }
+
 
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #f9f9f9;
+  background-color: white;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;

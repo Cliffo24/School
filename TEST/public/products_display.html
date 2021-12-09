@@ -3,7 +3,7 @@
 <script>//template taken from W3Schools and modified</script>
 <!DOCTYPE html>
 <html>
-<title>Shopping for GPU</title>
+<title>Clifford's Products</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -29,7 +29,7 @@
           total += shopping_cart[pk].reduce((a, b) => a + b);
       }
   });
-  loadJSON(user_data, function (response) {
+  loadJSON('user_data', function (response) {
       // Parsing JSON string into object
       user_reg_data = JSON.parse(response);
   });
@@ -39,14 +39,15 @@
   let params = (new URL(document.location)).searchParams;
   if (params.has('products_key')) {
       var this_product_key = params.get('products_key');
-  } else {
-      window.location.href = "./index.html";
-  }
+  } 
 </script>
  <!-- Nav Bar taken from W3SCHOOLS -->
   <div class="navbar" id = "navbar">
     <a href="index.html">Home</a>
+    <div class="navbar-right">
     <a href="/login">Login/Register</a>
+    <a href="./cart.html">Cart</a>
+    </div> 
     <div class="dropdown">
       <button class="dropbtn">Products
         <i class="fa fa-caret-down"></i>
@@ -55,9 +56,10 @@
         <script>
         nav_bar(this_product_key, products_data)
       </script>
+       
       </div>
-    </div> 
   </div> 
+</div>
 
 <!-- Image header taken from w3schools --> 
   <div class="w3-display-container w3-container">
@@ -70,6 +72,7 @@
   </div>
   <script>
   //displays product information depending on which page they are on
+
   var order_str = '';
 
   order_str += `
@@ -77,15 +80,16 @@
   products = products_data[this_product_key];
     for (i = 0; i < products.length; i++) {
       order_str += `
-
+        <section class = "item">
         <h2>${products[i]["model"]}</h2>
-        <p>${products[i]["price"]}</p>
-        <label id="quantity${i}_label"}">Quantity</label>
+        <p>$${products[i]["price"]}</p>
+        <label id="quantity${i}_label"}">Quantity Available : ${products[i]["quantity_available"]}</label>
         <INPUT TYPE="text" placeholder="0" name="quantities[${i}]" value="">
         <img class="displayimage"src="${products[i]["image"]}">
 
-        `;
+        </section>`;
 }
+
 // this closes the else for the form and table display
 document.write(order_str);
 </script>
