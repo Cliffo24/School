@@ -17,7 +17,7 @@
     var session = require('express-session');
 const { response } = require('express');
 
-
+app.use(cookieParser());
 
 
 //starts parser
@@ -57,9 +57,9 @@ app.get("/item_to_cart", function (request, response) {
 for(i in quantities){
     if((quantities[i])){
         request.session.cart[products_key] = quantities 
-        response.redirect('./products_display.html');
+        return response.redirect('./products_display.html');
     }else{
-        response.send(`
+        return response.send(`
     <script> alert(Invalid Quantity: Please enter Valid Quantity) </script>`)
         }
 
@@ -94,18 +94,15 @@ if (fs.existsSync(user_data_filename))
 else{
     console.log(user_data_filename + "Wrong filename. Enter the right filename!");
     }
-app.use(cookieParser());
 
 //Get request from login.view
 app.get("/login", function (request, response){
     response.redirect("./login.html")
     
 });
-app.get("/logout", function (request, reponse){
-    username=request.cookies.username
-    console.log(request.cookies)
-    response.clearCookie('username').redirect("./products_display.html")
-})
+app.get("/logout", function (request, response) {
+    response.clearCookie("username").redirect("./products_display.html")
+  });
 //taken form File I/O Lab and modified
 //redirected from login page and POST the username and login to verify in the next steps
 app.post("/loginform", function (request, response){
