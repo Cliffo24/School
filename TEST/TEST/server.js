@@ -152,7 +152,7 @@ app.post("/registernew", function (request, response){
     var new_user_password_rpt = POST["passwordrpt"];
     var new_user_email = POST["email"].toLowerCase();
     var new_user_fullname = POST["fullname"];
-    response.cookie(`username`, user_name, {maxAge: 500000})
+    response.cookie(`username`, user_name, {maxAge: 400000})
     console.log(POST)
     
 
