@@ -43,7 +43,20 @@
   <div class="navbar" id = "navbar">
     <a href="index.html">Home</a>
     <div class="navbar-right">
-    <a href="/login">Login/Register</a>
+      
+      <script>
+        var username = getCookie(`username`)
+          if(username == ""){
+          document.write(`
+            <a href="/login">Login</a>
+          `)
+          }else{
+            document.write(`
+            <a href="./logout">${username} : Logout</a>
+            `)
+          }
+      </script>
+  
     <a href="./cart.html">Cart</a>
     </div> 
     <div class="dropdown">
@@ -67,6 +80,19 @@
       <p><a href="#navbar" class="w3-button w3-black w3-padding-large w3-large">SHOP NOW</a></p>
     </div>
   </div>
+  <script>
+    var username = getCookie(`username`)
+       if(username == ""){
+        document.write(`
+       Hello! Welcome to the products page where you will find a numerous selection of products. Login/Register to purchase items!
+       `)
+       }else{
+        document.write(`
+           Welcome! ${username}
+         `)
+       }
+      
+   </script>
   
   <form action="./item_to_cart" name="products_key" method="GET">
     

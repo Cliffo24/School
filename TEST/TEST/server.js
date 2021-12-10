@@ -14,14 +14,16 @@
     var products = require('./public/products_data.json'); 
     var nodemailer = require(`nodemailer`)
     const cookieParser = require('cookie-parser');
-    var session = require('express-session')
+    var session = require('express-session');
+const { response } = require('express');
+const { redirect } = require('express/lib/response');
 
 
 
 //starts parser
     app.use(myParser.urlencoded({ extended: true }));
 //taken from assignment 3
-    app.use(session({secret: `GPU Store`}))
+    app.use(session({secret: `My key`}))
 //global variable to recall back the function to display the array after running through validation because this wasn't running I made another global variable at the bottom
     var stringified ={}
 //Route to handle any request; also calls next
@@ -53,34 +55,28 @@ app.get("/item_to_cart", function (request, response) {
     console.log(quantities)
 //validation
 for(i in quantities){
-    if(isNonNegInt(quantities[i])){
+    if((quantities[i])){
         request.session.cart[products_key] = quantities 
-        console.log(quantities)
         response.redirect('./products_display.html');
     }else{
-        document.write(`
+        response.send(`
     <script> alert(Invalid Quantity: Please enter Valid Quantity) </script>`)
-        
-
         }
 
     }
 });
 
+app.get("/modifycart", function (request,response){
+    response.redirect("./products_display.html")
+    
+
+});
 //getting the information held in the cart and recalling it to display taken from Assignment 3 example 
 app.post("/get_cart", function (request, response){
     shopping_cart = (request.session.cart)
     response.send(request.session.cart)
 });
 
-//Get request from login.view
-app.get("/checkout", function (request, response){
-    var checkoutview = fs.readFileSync("./public/checkout.view",'utf-8');
-//loading the template
-    response.send(eval('`' + checkoutview + '`'));
-
-    
-});
 
 
 //to read user files, taken from lab 14 and modified, load user.json
@@ -98,15 +94,16 @@ if (fs.existsSync(user_data_filename))
 else{
     console.log(user_data_filename + "Wrong filename. Enter the right filename!");
     }
+app.use(cookieParser());
 
 //Get request from login.view
 app.get("/login", function (request, response){
-    var loginview = fs.readFileSync("./public/login.view",'utf-8');
-//loading the template
-    response.send(eval('`' + loginview + '`'));
-
+    response.redirect("./login.html")
     
 });
+app.get("/logout", function (request, reponse){
+    response.clearCookie(`username`).redirect("./products_display.html")
+})
 //taken form File I/O Lab and modified
 //redirected from login page and POST the username and login to verify in the next steps
 app.post("/loginform", function (request, response){
@@ -122,8 +119,9 @@ app.post("/loginform", function (request, response){
 if(typeof user_data[user_name] != 'undefined'){
     if((user_data[user_name].password == user_pass)== true){
         console.log(user_name + " Logged in");
+        response.cookie(`username`, user_name, {maxAge: 500000})
 //if it is verified positively it would redirect to invoice
-    response.redirect("/checkout")
+    response.redirect("./products_display.html")
 }   else{ 
     response.send(`<script>
         alert("Password entered is wrong"); 
@@ -142,8 +140,7 @@ if(typeof user_data[user_name] != 'undefined'){
 });
 //reads and writes the register.view /register page
 app.get("/register", function (request, response) {
-    var registerview = fs.readFileSync('./public/register.view', 'utf-8');
-    response.send(eval('`' + registerview + '`'));
+  response.redirect("./register.html")
 });
 //taken from File/IO Lab and modified for registration
 app.post("/registernew", function (request, response){
@@ -155,6 +152,7 @@ app.post("/registernew", function (request, response){
     var new_user_password_rpt = POST["passwordrpt"];
     var new_user_email = POST["email"].toLowerCase();
     var new_user_fullname = POST["fullname"];
+    response.cookie(`username`, user_name, {maxAge: 500000})
     console.log(POST)
     
 
@@ -227,11 +225,19 @@ if(UsernameExist && validusername && validfullname && validemail &&passwordmatch
 //load the user_data.json file to prepare to write the register data after validation
     fs.writeFileSync(user_data_filename, data, "utf-8");
 //after it redirects to invoice to show the invoice after registration
-    response.redirect("/checkout")
+    response.redirect("./products_display.html")
         }else{
             response.redirect("/register")
     }
 
+});
+//Get request from checkout.view
+app.get("/checkout", function (request, response){
+    user_name= request.cookies.username
+    var checkoutview = fs.readFileSync("./public/checkout.view",'utf-8');
+//loading the template
+    response.send(eval('`' + checkoutview + '`'));
+    
 });
 
 //taken from assignment 3 
