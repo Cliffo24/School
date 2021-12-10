@@ -57,7 +57,7 @@ for(i in quantities){
     if(isNonNegInt(quantities[i])){
         request.session.cart[products_key] = quantities 
         console.log(quantities)
-           
+        
         }
 
     }
@@ -277,9 +277,10 @@ function display_invoice_table_rows() {
         for (i = 0; i < products_data[products_key].length; i++) {
             if (shopping_cart[products_key][i] != undefined && shopping_cart[products_key][i] != 0) {
                 a_qty = shopping_cart[products_key][i]
+               console.log(a_qty)
                 if (a_qty > 0) {
                     // product row
-                    extended_price = a_qty * products_data[products_key][i][`Price`]
+                    extended_price = a_qty * products_data[products_key][i].price
                     subtotal += extended_price;
                     str += (`
       <tr>
