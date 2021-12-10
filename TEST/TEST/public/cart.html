@@ -50,19 +50,7 @@
  <!-- Nav Bar taken from W3SCHOOLS -->
   <div class="navbar" id = "navbar">
     <a href="index.html">Home</a>
-    <div class="navbar-right">
-    <script>
-       var username = getCookie(`username`);
-          if (username == "") {
-            document.write(`
-                <a href="./login"></span>Login</a>
-                 `)
-          } else {
-            document.write(`
-              <a href="./logout"></span>Logout</a>
-                    `)
-  }
-    </script>
+    <div class="navbar-right"> 
     </div> 
     <div class="dropdown">
       <button class="dropbtn">Products
@@ -100,13 +88,13 @@
   //displays more cart information if the there are cart values
   if (cart_values) {
               document.write(`
-              <h3>Don't like your cart? Click below to modify all your cart values!</h3>
+              <h3>Click Modify Cart To Change Items</h3>
               <form action="./cart.html" name="cart" method="get">
-                  <input type="submit" value="Modify Cart!"> 
+                  <input type="submit" value="Modify Cart"> 
               </form>
-              <h3>Want to skip the hassle of checking your cart? Click below to pay for your products now!!</h3>
+              <h3>Click Purchase to Checkout</h3>
               <form action="/checkout" name="checkout" method="get">
-                  <input type="submit" value="Pay for Products!"> 
+                  <input type="submit" value="Purchase"> 
               </form>
               `)
   }

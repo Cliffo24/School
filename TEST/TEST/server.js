@@ -51,13 +51,17 @@ app.get("/item_to_cart", function (request, response) {
     // store the quantities array in the session cart object with the same products_key. 
     request.session.cart[products_key]= quantities;
     console.log(quantities)
-    response.redirect('./products_display.html');
 //validation
 for(i in quantities){
     if(isNonNegInt(quantities[i])){
         request.session.cart[products_key] = quantities 
         console.log(quantities)
+        response.redirect('./products_display.html');
+    }else{
+        document.write(`
+    <script> alert(Invalid Quantity: Please enter Valid Quantity) </script>`)
         
+
         }
 
     }
@@ -69,6 +73,14 @@ app.post("/get_cart", function (request, response){
     response.send(request.session.cart)
 });
 
+//Get request from login.view
+app.get("/checkout", function (request, response){
+    var checkoutview = fs.readFileSync("./public/checkout.view",'utf-8');
+//loading the template
+    response.send(eval('`' + checkoutview + '`'));
+
+    
+});
 
 
 //to read user files, taken from lab 14 and modified, load user.json
@@ -111,9 +123,7 @@ if(typeof user_data[user_name] != 'undefined'){
     if((user_data[user_name].password == user_pass)== true){
         console.log(user_name + " Logged in");
 //if it is verified positively it would redirect to invoice
-    var invoiceview = fs.readFileSync('./public/invoice.view', 'utf-8');
-//load the template
-    response.send(eval('`' + invoiceview + '`'));
+    response.redirect("/checkout")
 }   else{ 
     response.send(`<script>
         alert("Password entered is wrong"); 
@@ -129,11 +139,9 @@ if(typeof user_data[user_name] != 'undefined'){
                 
             </script>`);
         }
-console.log(PermQuantities)
 });
 //reads and writes the register.view /register page
 app.get("/register", function (request, response) {
-    console.log(PermQuantities)
     var registerview = fs.readFileSync('./public/register.view', 'utf-8');
     response.send(eval('`' + registerview + '`'));
 });
@@ -219,8 +227,7 @@ if(UsernameExist && validusername && validfullname && validemail &&passwordmatch
 //load the user_data.json file to prepare to write the register data after validation
     fs.writeFileSync(user_data_filename, data, "utf-8");
 //after it redirects to invoice to show the invoice after registration
-    var invoiceview = fs.readFileSync('./public/invoice.view', 'utf-8');
-    response.send(eval('`' + invoiceview + '`'));
+    response.redirect("/checkout")
         }else{
             response.redirect("/register")
     }
@@ -228,19 +235,11 @@ if(UsernameExist && validusername && validfullname && validemail &&passwordmatch
 });
 
 //taken from assignment 3 
-app.get("/checkout", function (request, response) {
+app.get("/invoice", function (request, response) {
     // Generate HTML invoice string
-      var invoice_str = `Thank you for your order!<table border><th>Quantity</th><th>Item</th>`;
-      var shopping_cart = request.session.cart;
-      for(product_key in products_data) {
-        for(i=0; i<products_data[product_key].length; i++) {
-            if(typeof shopping_cart[product_key] == 'undefined') continue;
-            qty = shopping_cart[product_key][i];
-            if(qty > 0) {
-              invoice_str += `<tr><td>${qty}</td><td>${products_data[product_key][i].name}</td><tr>`;
-            }
-        }
-    }
+    var invoiceview = fs.readFileSync('./public/invoice.view', 'utf-8');
+    //load the template
+        response.send(eval('`' + invoiceview + '`'));
 });
 
 //Validation functions taken from the Internet in order to validate username characters, full name characters, valid email.
