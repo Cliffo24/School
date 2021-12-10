@@ -16,14 +16,14 @@
     const cookieParser = require('cookie-parser');
     var session = require('express-session');
 const { response } = require('express');
-const { redirect } = require('express/lib/response');
+
 
 
 
 //starts parser
     app.use(myParser.urlencoded({ extended: true }));
 //taken from assignment 3
-    app.use(session({secret: `My key`}))
+    app.use(session({secret: `Mykey`}))
 //global variable to recall back the function to display the array after running through validation because this wasn't running I made another global variable at the bottom
     var stringified ={}
 //Route to handle any request; also calls next
@@ -102,7 +102,9 @@ app.get("/login", function (request, response){
     
 });
 app.get("/logout", function (request, reponse){
-    response.clearCookie(`username`).redirect("./products_display.html")
+    username=request.cookies.username
+    console.log(request.cookies)
+    response.clearCookie('username').redirect("./products_display.html")
 })
 //taken form File I/O Lab and modified
 //redirected from login page and POST the username and login to verify in the next steps
