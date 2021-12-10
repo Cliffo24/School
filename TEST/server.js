@@ -45,24 +45,19 @@ app.post("/user_data", function (request, response) {
 app.get("/item_to_cart", function (request, response) {
     // get the product key sent from the form post
     var products_key = request.query['products_key'] 
+    console.log(products_key)
     // Get quantities from the form post and convert strings from form post to numbers
     var quantities = request.query['quantities'].map(Number)
     // store the quantities array in the session cart object with the same products_key. 
     request.session.cart[products_key]= quantities;
     console.log(quantities)
-    response.redirect('./cart.html');
+    response.redirect('./products_display.html');
 //validation
 for(i in quantities){
     if(isNonNegInt(quantities[i])){
         request.session.cart[products_key] = quantities 
-        return response.send(`
-            <script> Alert('${quantities.reduce((a, b) => a + b, 0)} items on the page is in cart");
-            window.history.back();
-             </script>`);
-    }else{
-        response.send(`<script> Alert("Entered Invalid Quantity");
-            window.history.back();
-            </script>`);
+        console.log(quantities)
+           
         }
 
     }

@@ -76,17 +76,37 @@
 
 
  <h1>Modify Cart</h1>
-  <script>
-  //displays product information depending on which page they are on taken from Assignment 3 Example and modified
+ <script>
+  //displays product informaiton depending on which page they are on
   var order_str = '';
-    for(products_key in shopping_cart){
-    order_str +=`<INPUT TYPE="HIDDEN" NAME="products_key" VALUE="${this_product_key}">`;
-  
-    }
+
+  order_str += `
+<INPUT TYPE="HIDDEN" NAME="products_key" VALUE="${this_product_key}">
+<input type="submit" class="button" value="Modify your ${this_product_key}">
+`;
+
+  products = products_data[this_product_key];
+
+  for (i = 0; i < products.length; i++) {
+      var extendedprice = products[i]['price'] * shopping_cart[this_product_key][i];
+      if (shopping_cart[this_product_key][i] != 0 && shopping_cart[this_product_key][i] != undefined) {
+          order_str += `
+
+<h2>${products[i]["model"]}</h2> 
+<p>${shopping_cart[this_product_key][i]} will cost you ${extendedprice.toFixed(2)}</p>
+<p>${products[i]['price']}</p>
+
+<label id="quantity${i}_label"}">Quantity</label>
+<INPUT TYPE="text" placeholder="0" name="quantities[${i}]" value="${shopping_cart[this_product_key][i]}"></input>
+
+`;
+      }
 
 
-// this closes the else for the form and table display
-document.write(order_str);
+  }
+  // this closes the else for the form and table display
+  document.write(order_str);
+
 </script>
 <script></script>
 </script>
