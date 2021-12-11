@@ -502,8 +502,8 @@ if(validfullname && validemail && validcity && validstate && validstate && valid
         } else {
           errormsg= `<br>Your invoice was mailed to ${email}`;
         }
+        
         return response.send(emailmsg);
-        console.log(errormsg)
       });
 
 });
