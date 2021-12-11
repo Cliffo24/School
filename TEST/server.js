@@ -393,7 +393,7 @@ if(email != user_data[username]['email']){
     }else{
         var emailmatch=true
 }
-    console.log("CREDIT CARD CREDENTIALS VALID")
+    console.log("CREDIT CARD CREDENTIALS VALID AND MATCH OUR RECORDS")
 //valid 
 if(validfullname && validemail && validcity && validstate && validstate && validzip && validcardname && validexpmonth && validexpyear && validcardnumber && address && emailmatch){
   //takes the content within invoice.view posted here into a string to send to customer email

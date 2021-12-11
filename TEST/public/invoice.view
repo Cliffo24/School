@@ -1,4 +1,4 @@
-
+<--The invoice.view is used in the server.js when we put it in a string to recall-->
 <!DOCTYPE html>
 <html lang="en">
 
