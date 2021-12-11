@@ -290,6 +290,7 @@ app.post("/invoice", function (request, response) {
     let POST = request.body
     var full_name= POST['firstname']
     var email = POST['email'].toLowerCase();
+    var address = POST['address']
     var city = POST['city']
     var state = POST['state'].toUpperCase();
     var zip = POST ['zip']
@@ -385,7 +386,7 @@ if(!validateCVV(cvv)){
 }
     console.log("CREDIT CARD CREDENTIALS VALID")
 //valid 
-if(validfullname && validemail && validcity && validstate && validstate && validzip && validcardname && validexpmonth && validexpyear && validcardnumber){
+if(validfullname && validemail && validcity && validstate && validstate && validzip && validcardname && validexpmonth && validexpyear && validcardnumber && address){
 // Generate HTML invoice string
     var invoiceview = fs.readFileSync('./public/invoice.view', 'utf-8');
 //load the template
