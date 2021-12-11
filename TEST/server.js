@@ -285,7 +285,7 @@ app.post("/checkout", function (request, response){
     }
 });
 
-//taken from assignment 3 and modified
+//taking the post information and assigning it to variable to use in invoice and for validation
 app.post("/invoice", function (request, response) {
     let POST = request.body
     var full_name= POST['firstname']
@@ -392,7 +392,121 @@ if(validfullname && validemail && validcity && validstate && validstate && valid
 //load the template
     response.send(eval('`' + invoiceview + '`'));
     }
+  //need to work out
+    var invoice_str= `
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <title>Invoice1</title>
+</head>
+<script>//creating table for invoice</script>
+  <body>
+  <p>Thank you for your order!</p>
+  <h1> <b>Welcome ${full_name} To Your Invoice<b> </h1>
+    <table border="2">
+    <center>
+        <tbody>
+                <tr>
+                <td style="text-align: left;" colspan="4">
+                <h1>Customer Information:</h1>
+                <p>Customer Name: ${full_name}</p>
+                <p>Customer Email: ${email}</p>
+                </th>
+                </tr>
+                
+                <tr>
+                <td style="text-align: left;" colspan="4">
+                <h1>Billed To:</h1>
+                <p>Card Name: ${cardname}</p>
+                <p>Card Number: ${cardnumber}</p>
+                </tr>
+                
+                <tr>
+                <td style="text-align: left;" colspan="4">
+                <h1>Shipping Information:</h1>
+                <p>Name: ${full_name}</p>
+                <p>Address: ${address}</p>
+                <p>City: ${city}</p>
+                <p>State: ${state}</p>
+                <p>Zip: ${zip}</p>
+                </tr>
+                
+
+
+            
+                <tr>
+                <th style="text-align: center;" width="43%">Item</th>
+                <th style="text-align: center;" width="11%">Quantity</th>
+                <th style="text-align: center;" width="13%">Price</th>
+                <th style="text-align: center;" width="54%">Extended Price</th>
+                </tr>
+                <tr>
+
+                  ${display_invoice_table_rows()}
+ 
+                </tr>
+                 </script>
+                  <tr>
+                    <td colspan="4" width="100%">&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" width="67%">Sub-total</td>
+                    <td width="54%">$${subtotal.toFixed(2)}</td>
+                  </tr>
+                  <tr>
+                    <td  colspan="3" width="67%"><span>Tax at (4.71%)</span></td>
+                    <td width="54%">$${tax.toFixed(2)}</td>
+                  </tr>
+                  <tr>
+                      <td  colspan="3" width="67%">Shipping</span></td>
+                      <td width="54%">$${shipping.toFixed(2)}</td>
+                    </tr>
+                  <tr>
+                    <td colspan="3" width="67%"><strong>Total</strong></td>
+                    <td width="54%"><strong>$${total.toFixed(2)}</strong></td>
+                  </tr>
+                  <tr>
+                    <td style="text-align: center;" colspan="4"> <strong><br>OUR SHIPPING POLICY IS:
+                      <br>A subtotal $0 - $1,000.00 will be $50 shipping
+                      <br>A subtotal $1,100.00 - $2,000.00 will be $100 shipping</br>
+                      Subtotals over $2000 will be charged 10% of the subtotal amount</strong>
+                    </td>
+                  </tr>
+                  </center>
+                </tbody>
+              </table> 
+        </body>`
+
+
+    // Set up mail server. Only will work on UH Network due to security restrictions
+      var transporter = nodemailer.createTransport({
+        host: "mail.hawaii.edu",
+        port: 25,
+        secure: false, // use TLS
+        tls: {
+          // do not fail on invalid certs
+          rejectUnauthorized: false
+        }
+      });
+    
+     
+      var mailOptions = {
+        from: 'clifford.store@gmail.com',
+        to: email,
+        subject: 'Cliffords Store Customer Invoice',
+        html: invoice_str
+      };
+    
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          invoice_str+= '<br>There was an error and your invoice could not be emailed :(';
+        } else {
+          invoice_str+= `<br>Your invoice was mailed to ${email}`;
+        }
+        response.send(invoice_str);
+      });
+
 });
+
 
 
 //Validation functions taken example from the W3resource then modified in order to validate username characters, full name characters, valid email, and Credit card information.
