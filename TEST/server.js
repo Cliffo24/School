@@ -390,7 +390,7 @@ if(validfullname && validemail && validcity && validstate && validstate && valid
 // Generate HTML invoice string
     var invoiceview = fs.readFileSync('./public/invoice.view', 'utf-8');
 //load the template
-    response.send(eval('`' + invoiceview + '`'));
+    return response.send(eval('`' + invoiceview + '`'));
     }
   //need to work out
     var invoice_str= `
@@ -479,7 +479,7 @@ if(validfullname && validemail && validcity && validstate && validstate && valid
 
     // Set up mail server. Only will work on UH Network due to security restrictions
       var transporter = nodemailer.createTransport({
-        host: "mail.hawaii.edu",
+        host: "gmail",
         port: 25,
         secure: false, // use TLS
         tls: {
@@ -498,11 +498,12 @@ if(validfullname && validemail && validcity && validstate && validstate && valid
     
       transporter.sendMail(mailOptions, function(error, info){
         if (error) {
-          invoice_str+= '<br>There was an error and your invoice could not be emailed :(';
+          errormsg= '<br>There was an error and your invoice could not be emailed :(';
         } else {
-          invoice_str+= `<br>Your invoice was mailed to ${email}`;
+          errormsg= `<br>Your invoice was mailed to ${email}`;
         }
-        response.send(invoice_str);
+        return response.send(emailmsg);
+        console.log(errormsg)
       });
 
 });
