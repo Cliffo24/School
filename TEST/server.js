@@ -12,18 +12,21 @@
     var queryString = require("query-string") 
 //require data from products_data.js /loading it
     var products = require('./public/products_data.json'); 
+//require nodemailer
     var nodemailer = require(`nodemailer`)
+//require cookie parser
     const cookieParser = require('cookie-parser');
+//require express session
     var session = require('express-session');
-const { response } = require('express');
-
+    const { response } = require('express');
+//starts cookie parser
 app.use(cookieParser());
-
-
+//holds all product quantities in cart to recall later as global variable
+var shopping_cart = [];
 //starts parser
     app.use(myParser.urlencoded({ extended: true }));
 //taken from assignment 3
-    app.use(session({secret: `Mykey`}))
+    app.use(session({secret: `Mykey`, resave: true, saveUninitialized: true}))
 //global variable to recall back the function to display the array after running through validation because this wasn't running I made another global variable at the bottom
     var stringified ={}
 //Route to handle any request; also calls next
@@ -45,36 +48,62 @@ app.post("/user_data", function (request, response) {
 
 //processes the form takes the quantity, saves the quantity that was added into the cart taken from taken from Assignment 3 example and modified
 app.get("/item_to_cart", function (request, response) {
-    // get the product key sent from the form post
+   var username =  request.cookies.username
+   if(username == undefined){
+       response.redirect("./login.html")
+   }else{
+// get the product key sent from the form post
     var products_key = request.query['products_key'] 
     console.log(products_key)
-    // Get quantities from the form post and convert strings from form post to numbers
+// Get quantities from the form post and convert strings from form post to numbers
     var quantities = request.query['quantities'].map(Number)
-    // store the quantities array in the session cart object with the same products_key. 
+// store the quantities array in the session cart object with the same products_key. 
     request.session.cart[products_key]= quantities;
     console.log(quantities)
-//validation
+//validation before adding to cart
 for(i in quantities){
-    if((quantities[i])){
+    if((isNonNegInt(quantities[i]))){
         request.session.cart[products_key] = quantities 
         return response.redirect('./products_display.html');
     }else{
-        return response.send(`
-    <script> alert(Invalid Quantity: Please enter Valid Quantity) </script>`)
+        return response.send(`<script> 
+        alert("Invalid Quantity: Please enter Valid Quantity");
+        window.history.back(); 
+        </script>`)
         }
 
     }
+    }
 });
-
+//taken from Assignment 3 and modified to adjust quantities in cart
 app.get("/modifycart", function (request,response){
-    response.redirect("./products_display.html")
-    
+//gets product key from form
+    var products_key = request.query['products_key']; 
+//from the product key, it grabs quantities assigned from cart and which convert strings from form to post as number
+    var quantities = request.query['quantities'].map(Number); 
+    for (i in quantities) {
+//uses isNonNegInt function from Lab 12 in order to check quantities if they are valid if they are valid it will tell us amount of number in cart or enter a valid quantity
+    if (isNonNegInt(quantities[i])) {
+            // store the quantities array in the session cart object with the same products_key. 
+            request.session.cart[products_key] = quantities; 
+            return response.send(`<script>
+            alert("${quantities.reduce((a, b) => a + b, 0)} of this item is in your cart"); 
+            window.top.location.reload();          
+            </script>`);
+        } else {
+            return response.send(`<script>
+            alert("Invalid Quantity: Please enter a valid quantity"); 
+            window.history.back(); 
+            </script>`);
+        }
+
+    }
 
 });
 //getting the information held in the cart and recalling it to display taken from Assignment 3 example 
 app.post("/get_cart", function (request, response){
     shopping_cart = (request.session.cart)
-    response.send(request.session.cart)
+    response.send(shopping_cart)
 });
 
 
@@ -112,14 +141,13 @@ app.post("/loginform", function (request, response){
     user_pass = POST["password"];
     console.log(POST)
      
-   
 
 //to verify a existing user and login taken from FILE/IO lab and modified
 if(typeof user_data[user_name] != 'undefined'){
     if((user_data[user_name].password == user_pass)== true){
         console.log(user_name + " Logged in");
         response.cookie(`username`, user_name, {maxAge: 500000})
-//if it is verified positively it would redirect to invoice
+//if it is verified positively it would redirect to products_display page with assigning a cookie
     response.redirect("./products_display.html")
 }   else{ 
     response.send(`<script>
@@ -137,9 +165,11 @@ if(typeof user_data[user_name] != 'undefined'){
             </script>`);
         }
 });
-//reads and writes the register.view /register page
+//reads and writes the register.view /register page also checking if it keeps cart items when transferring pages
 app.get("/register", function (request, response) {
-  response.redirect("./register.html")
+    shopping_cart = (request.session.cart)
+    console.log(shopping_cart)
+    response.redirect("./register.html")
 });
 //taken from File/IO Lab and modified for registration
 app.post("/registernew", function (request, response){
@@ -151,8 +181,9 @@ app.post("/registernew", function (request, response){
     var new_user_password_rpt = POST["passwordrpt"];
     var new_user_email = POST["email"].toLowerCase();
     var new_user_fullname = POST["fullname"];
-    response.cookie(`username`, user_name, {maxAge: 400000})
+    response.cookie(`username`,user_name, maxAge= 400000)
     console.log(POST)
+    
     
 
  console.log(new_user_fullname)
@@ -223,31 +254,156 @@ if(UsernameExist && validusername && validfullname && validemail &&passwordmatch
     data = JSON.stringify(user_data);
 //load the user_data.json file to prepare to write the register data after validation
     fs.writeFileSync(user_data_filename, data, "utf-8");
-//after it redirects to invoice to show the invoice after registration
-    response.redirect("./products_display.html")
-        }else{
+//after it redirects to products page
+    var username = request.cookies.username
+    shopping_cart = request.cookies.cart
+    console.log(shopping_cart)
+    console.log(username)
+        if(username == ""){
             response.redirect("/register")
+        }else{
+        response.redirect("/products_display.html")
+        }
+            
     }
 
 });
 //Get request from checkout.view
-app.get("/checkout", function (request, response){
-    user_name= request.cookies.username
+app.post("/checkout", function (request, response){
+//to check if cookies is assigned and defined with a username if not defined will make you login 
+    var username= request.cookies.username
+    console.log(username)
+    if(username == undefined){
+        response.send(`<script>
+        alert("Please login before you purchase"); 
+        window.history.back();     
+         </script>`);
+    }else{
     var checkoutview = fs.readFileSync("./public/checkout.view",'utf-8');
 //loading the template
     response.send(eval('`' + checkoutview + '`'));
-    
+    }
 });
 
-//taken from assignment 3 
-app.get("/invoice", function (request, response) {
-    // Generate HTML invoice string
+//taken from assignment 3 and modified
+app.post("/invoice", function (request, response) {
+    let POST = request.body
+    var full_name= POST['firstname']
+    var email = POST['email'].toLowerCase();
+    var city = POST['city']
+    var state = POST['state'].toUpperCase();
+    var zip = POST ['zip']
+    var cardname= POST['cardname']
+    var cardnumber= POST['cardnumber']
+    var expmonth= POST['expyear']
+    var expyear= POST['expyear']
+    var cvv= POST['cvv']
+    console.log(POST)
+    var username = request.cookies.username
+    console.log(username)
+
+//Validation for credit card information using the same format as my registration validation format
+if(!validatefullname(full_name)){
+    response.send(`<script>
+    alert("Fullname: ${full_name} Must between 0 and 30 characters following the prompt Last Name, First Name"); 
+    window.history.back();
+    </script>`);
+    }else{
+        var validfullname = true
+}
+if(!validateEmail(email)){
+    response.send(`<script>
+    alert("Email: ${email} Must follow the example jimmie@gmail.com or jimmie@hotmail.al"); 
+    window.history.back();
+    </script>`);
+    }else{
+        var validemail=true
+}
+if(!validateCity(city)){
+    response.send(`<script>
+    alert("City: ${city} is invalid. Cannot be less than 0 or be more than 20 characters"); 
+    window.history.back();
+    </script>`);
+    }else{
+        var validcity=true
+    }
+if(!validateState(state)){
+    response.send(`<script>
+    alert("State: ${state} is invalid. Please enter a valid state with 2 uppercase letters"); 
+    window.history.back();
+    </script>`);
+    }else{
+        var validstate=true
+}
+if(!validateZip(zip)){
+    response.send(`<script>
+    alert("Zip: ${zip} is invalid. Please enter a 5 digit zip code"); 
+    window.history.back();
+    </script>`);
+    }else{
+        var validzip=true
+}
+if(!validateCardName(cardname)){
+    response.send(`<script>
+    alert("Card Name: ${cardname} is invalid. Please enter full name that does not exceed 30 characters"); 
+    window.history.back();
+    </script>`);
+    }else{
+        var validcardname=true
+}
+if(!validateCardNumber(cardnumber)){
+    response.send(`<script>
+    alert("Card Number: ${cardnumber} is invalid. Please enter a valid credit card number that has 16 numbers"); 
+    window.history.back();
+    </script>`);
+    }else{
+        var validcardnumber=true
+}
+if(!validateExpMonth(expmonth)){
+    response.send(`<script>
+    alert("Expiration Month : ${expmonth} is invalid. Please enter a valid expiration month starting with 0 if it is a single digit month"); 
+    window.history.back();
+    </script>`);
+    }else{
+        var validexpmonth=true
+}
+if(!validateExpYear(expyear)){
+    response.send(`<script>
+    alert("Expiration Year: ${expyear} is invalid. Please enter the last 2 digits of the year. Example:(2021) = 21"); 
+    window.history.back();
+    </script>`);
+    }else{
+        var validexpyear=true
+}
+if(!validateCVV(cvv)){
+    response.send(`<script>
+    alert("CVV: ${cvv} is invalid. Please enter a valid 3 digit number for CVV it is usually found on the back in center of the card"); 
+    window.history.back();
+    </script>`);
+    }else{
+        var validcardnumber=true
+}
+    console.log("CREDIT CARD CREDENTIALS VALID")
+//valid 
+if(validfullname && validemail && validcity && validstate && validstate && validzip && validcardname && validexpmonth && validexpyear && validcardnumber){
+// Generate HTML invoice string
     var invoiceview = fs.readFileSync('./public/invoice.view', 'utf-8');
-    //load the template
-        response.send(eval('`' + invoiceview + '`'));
+//load the template
+    response.send(eval('`' + invoiceview + '`'));
+    }
 });
 
-//Validation functions taken from the Internet in order to validate username characters, full name characters, valid email.
+
+//Validation functions taken example from the W3resource then modified in order to validate username characters, full name characters, valid email, and Credit card information.
+/*
+Expression Template: used from Assignment 2 is as follows each function holds a bracket of what can be included as example
+[a-z]represents lower case letters
+[A-Z]represents upper case letters
+[0-9] represents all numbers
+{0,5} represents requirements which states at at least 0 characters to no more than 5 characters
+*/
+
+
 function validateUsername(user) {
     const re = /^[a-zA-Z0-9]{5,15}$/;
     return re.test(String(user).toLowerCase());
@@ -258,10 +414,52 @@ function validatefullname(fullname){
     return re.test(String(fullname));
 }
 
-function validateEmail(email) {//used =@ and +\. to seperate sections of email
+function validateEmail(email) {
+//used =@ and +\. to seperate sections of email
     const re = /^[a-zA-Z0-9._]+@[a-zA-Z0-9.]+\.[a-z]{2,3}$/;
     return re.test(String(email).toLowerCase());
 }
+
+function validateCity(city){
+    const re = /^[ +a-zA-Z,]{0,20}$/
+    return re.test(String(city));
+}
+
+function validateState(state){
+    const re = /^[ +a-zA-Z,]{2}$/
+    return re.test(String(state));
+}
+
+function validateZip(zip){
+    const re = /^[0-9]{5}$/
+    return re.test(String(zip));
+}
+
+function validateCardName(cardname){
+    const re = /^[ +a-zA-Z,]{0,30}$/
+    return re.test(String(cardname));
+}
+
+function validateCardNumber(cardnumber){
+    const re = /^[0-9]{16}$/
+    return re.test(String(cardnumber));
+}
+
+function validateExpMonth(expmonth){
+    const re = /^[0-9]{1,2}$/
+    return re.test(String(expmonth));
+}
+function validateExpYear(expyear){
+    const re = /^[0-9]{2}$/
+    return re.test(String(expyear));
+}
+
+function validateCVV(cvv){
+    const re = /^[0-9]{3}$/
+    return re.test(String(cvv));
+}
+
+
  //From Lab 12 from Assignment Example for validation
  function isNonNegInt(q, return_errors = false) {
     errors = []; // assume no errors at first
@@ -272,7 +470,7 @@ function validateEmail(email) {//used =@ and +\. to seperate sections of email
     return return_errors ? errors : (errors.length == 0);
 }
 
-//Taken from Assignment 1 example. and modified, will be used to for invoice.view to take all the values gathered from products.html and print out the values into the invoice
+//Taken from Assignment 1 example. changed the values to match with Assignment 3 example and modified, will be used to for invoice.view to take all the values gathered from shopping cart and print out the values into the invoice
 function display_invoice_table_rows() {
     subtotal = 0;
     str = '';
@@ -299,6 +497,7 @@ function display_invoice_table_rows() {
             }
         }
     }
+
 //Taken from Invoice Lab and modified
 // Compute tax
     tax_rate = 0.0471;
@@ -321,7 +520,6 @@ if (subtotal <= 1000) {
     return str;
 
 }
-
 
 
 app.use(express.static('./public'));

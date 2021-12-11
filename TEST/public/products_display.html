@@ -1,5 +1,3 @@
-<script>
-</script>
 <script>//template taken from W3Schools and modified</script>
 <!DOCTYPE html>
 <html>
@@ -84,18 +82,15 @@
     var username = getCookie(`username`)
        if(username == ""){
         document.write(`
-       Hello! Welcome to the products page where you will find a numerous selection of products. Login/Register to purchase items!
+       <h1><center>Welcome!</center></h1> 
+       <h2><center>To view products please use the naviagtion bar "Products". Login/Register to purchase items!</center></h2>
        `)
        }else{
         document.write(`
-           Welcome! ${username}
+           <h1><center>Welcome! ${username} </center></h1>
          `)
        }
-      
-   </script>
-  
-  <form action="./item_to_cart" name="products_key" method="GET">
-    
+  </script> 
   <script>
   //displays product information depending on which page they are on taken from Assignment 3 Example and modified
   var order_str = '';
@@ -116,9 +111,9 @@
 }
 
 // this closes the else for the form and table display
-document.write(order_str);
+document.write(`<form action="./item_to_cart" name="products_key" method="GET"> ${order_str} <input type="submit" class="button" value="Add Items To Cart">`);
 </script>
-<input type="submit" class="button" value="Add Items To Cart">
+
 </form>
 </div>
 </body>

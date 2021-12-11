@@ -1,5 +1,25 @@
 <script>
-    //template taken from W3SCHOOLS
+  //template taken from W3SCHOOLS
+  //load json files files taken from Assignment 3 example and modified
+  var products_data;
+  var total = 0;
+  loadJSON("get_products_data", function (response) {
+      // Parsing JSON string into object
+      products_data = JSON.parse(response);
+  });
+  console.log(products_data)
+  loadJSON('get_cart', function (response) {
+      // Parsing JSON string into object
+      shopping_cart = JSON.parse(response);
+      cart = response
+      
+  });
+  loadJSON('user_data', function (response) {
+      // Parsing JSON string into object
+      user_reg_data = JSON.parse(response);
+  });
+  
+
 </script>
 <!DOCTYPE html>
 <html>

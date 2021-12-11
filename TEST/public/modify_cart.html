@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Clifford's Shop</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="./functions.js"></script>
+    <link rel="stylesheet" href="checkout.css">
+    <script>
+        
+        // get the query string
+        var products_data;
+        var total = 0;
+        loadJSON('get_products_data', function (response) {
+            // Parsing JSON string into object
+            products_data = JSON.parse(response);
+        });
+        loadJSON('get_cart', function (response) {
+            // Parsing JSON string into object
+            shopping_cart = JSON.parse(response);
+            cart = response
+            for (pk in shopping_cart) {
+                total += shopping_cart[pk].reduce((a, b) => a + b);
+            }
+        });
+
+        // get the query string
+        let params = (new URL(document.location)).searchParams;
+        if (params.has('products_key')) {
+            var this_product_key = params.get('products_key');
+        } else {
+            window.location.href = `./index.html`;
+        }
+    </script>
+</head>
+
+<body>
+
+    <form action="./modifycart" name="products_key" method="get">
+
+    <div>
+    <script>
+//taken from Assignment 3 example and modified to modify cart quantites
+    var order_str = '';
+
+    order_str += `
+        <INPUT TYPE="HIDDEN" NAME="products_key" VALUE="${this_product_key}">
+        <input type="submit" class="button" value="Modify your ${this_product_key}">
+         `;
+
+        products = products_data[this_product_key];
+        for (i = 0; i < products.length; i++) {
+            var extendedprice = products[i]['price'] * shopping_cart[this_product_key][i];
+        if (shopping_cart[this_product_key][i] != 0 && shopping_cart[this_product_key][i] != undefined) {
+            order_str += `
+        
+                <center><h2>${products[i]["model"]}</h2></center>
+                <center><p>Price:<b>$${products[i]['price']}</b></p></center>
+                <center><p>${shopping_cart[this_product_key][i]} ${products[i]["model"]} will cost ${extendedprice.toFixed(2)}</p></center>
+                <center><p>${products[i]['image']}<p></center>
+       
+                <label id="quantity${i}_label"}"> Edit Quantity You Desire</label>
+                <INPUT TYPE="text" placeholder="0" name="quantities[${i}]" value="${shopping_cart[this_product_key][i]}"></input>
+         
+                `;
+                        }
+
+
+                    }
+                    // this closes the else for the form and table display
+                    document.write(order_str);
+
+                </script>
+
+        
+        </div>
+    </form>
+
+</body>
+
+</html>

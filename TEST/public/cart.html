@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="products-style.css">
-
 <script src="./functions.js"></script>
 
 <script>
@@ -24,6 +23,7 @@
      
   });
   console.log(products_data)
+  //to hold items within the cart taken from assignment 3 example 
   loadJSON('get_cart', function (response) {
       // Parsing JSON string into object
       shopping_cart = JSON.parse(response);
@@ -33,6 +33,7 @@
           total += shopping_cart[pk].reduce((a, b) => a + b);
       }
   });
+  //holds user data takenf rom assignment 3 example
   loadJSON('user_data', function (response) {
       // Parsing JSON string into object
       user_reg_data = JSON.parse(response);
@@ -47,9 +48,25 @@
   } 
 </script>
  <!-- Nav Bar taken from W3SCHOOLS -->
-  <div class="navbar" id = "navbar">
+ <div class="navbar" id = "navbar">
     <a href="index.html">Home</a>
-    <div class="navbar-right"> 
+    <div class="navbar-right">
+      
+      <script>
+//check if there is cookie
+        var username = getCookie(`username`)
+          if(username == ""){
+          document.write(`
+            <a href="/login">Login</a>
+          `)
+          }else{
+            document.write(`
+            <a href="./logout">${username}: Logout</a>
+            `)
+            }
+      </script>
+  
+    <a href="./cart.html">Cart</a>
     </div> 
     <div class="dropdown">
       <button class="dropbtn">Products
@@ -64,36 +81,40 @@
   </div> 
 </div>
 
+<script>
+//verify if there is a cookie. personalization
+     var username = getCookie(`username`)
+          if(username == ""){
+              document.write(`<center><h1>Welcome to your Cart!</h1></center>`)
+            }else{
+                document.write(`<center><h1>Welcome to your Cart! ${username}</h1><center>`)
+            }
+</script>
 
-
- <h1>Modify Cart</h1>
+ 
  <script>
-  //displays cart. Same code as from products_data.html
+//views products and the quantities of products that are within the cart which is above the modify cart section
   for (products_key in shopping_cart) {
       for (i = 0; i < products_data[products_key].length; i++) {
-          if (shopping_cart[products_key][i] != undefined && shopping_cart[products_key][i] != 0) {
-              document.write(`
-              <br>
-                  <span>${products_data[products_key][i].model}</span>
-                  <div id="quantitiesvalue">
-                  <INPUT TYPE="number" min=0 value="${shopping_cart[products_key][i]}" readonly>
-                  </div>
+        if (shopping_cart[products_key][i] != undefined && shopping_cart[products_key][i] != 0) {
+            document.write(`
+            <br>
+                <center>${products_data[products_key][i].model}</center>
+                <div id="quantitiesvalue">
+                <center><INPUT TYPE="number" min=0 value="${shopping_cart[products_key][i]}"readonly></center>
+                </div>
                   `)
               var cart_values = true
           }
 
       }
   }
-  //displays more cart information if the there are cart values
+//if the cart has quantites it will write a purchase form in products
   if (cart_values) {
               document.write(`
-              <h3>Click Modify Cart To Change Items</h3>
-              <form action="./modifycart" name="cart" method="get">
-                  <input type="submit" value="Modify Cart"> 
-              </form>
-              <h3>Click Purchase to Checkout</h3>
-              <form action="/checkout" name="checkout" method="get">
-                  <input type="submit" value="Purchase"> 
+              <center><h3>Click Purchase to Checkout</h3></center>
+              <form action="/checkout" name="checkout" method="POST">
+                <center><input type="submit" value="Purchase"></center>
               </form>
               `)
   }
@@ -104,6 +125,31 @@
   }
 </script>
 
+<script>
+//taken from assignment 3 example and modified 
+//takes the products inside the shopping cart to verify if there are products within the cart and if there are it will write the modify page within the cart so it will allow users to modify
+var order_str = '';
+for (products_key in shopping_cart) {
+    order_str +=` <INPUT TYPE="HIDDEN" NAME="products_key" VALUE="${products_key}">`;
+    var products_displayed = false;
+    for (i = 0; i < products_data[products_key].length; i++) {
+        if (shopping_cart[products_key][i] != undefined && shopping_cart[products_key][i] != 0) {
+            var products_displayed = true;
+            }
+        }
+        if(products_displayed == true){
+            order_str += `
+            <div style="content">
+            <iframe src="./modify_cart.html?products_key=${products_key}" width="100%" height="600px">
+            </iframe>
+            </div>
+            `;
+        }
+    }
+    // this closes the else for the form and table display
+    document.write(order_str);
+
+</script>
 
 </div>
 </body>
