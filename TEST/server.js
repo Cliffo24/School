@@ -384,15 +384,19 @@ if(!validateCVV(cvv)){
     }else{
         var validcardnumber=true
 }
+//used email to match with our user_data used to register for their account as validation
+if(email != user_data[username]['email']){
+    response.send(`<script>
+    alert("Email: ${email} does not match our records. Please enter email that matches with the email you used to register your account."); 
+    window.history.back();
+    </script>`);
+    }else{
+        var emailmatch=true
+}
     console.log("CREDIT CARD CREDENTIALS VALID")
 //valid 
-if(validfullname && validemail && validcity && validstate && validstate && validzip && validcardname && validexpmonth && validexpyear && validcardnumber && address){
-// Generate HTML invoice string
-    var invoiceview = fs.readFileSync('./public/invoice.view', 'utf-8');
-//load the template
-    return response.send(eval('`' + invoiceview + '`'));
-    }
-  //need to work out
+if(validfullname && validemail && validcity && validstate && validstate && validzip && validcardname && validexpmonth && validexpyear && validcardnumber && address && emailmatch){
+  //takes the content within invoice.view posted here into a string to send to customer email
     var invoice_str= `
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -400,7 +404,6 @@ if(validfullname && validemail && validcity && validstate && validstate && valid
 </head>
 <script>//creating table for invoice</script>
   <body>
-  <p>Thank you for your order!</p>
   <h1> <b>Welcome ${full_name} To Your Invoice<b> </h1>
     <table border="2">
     <center>
@@ -474,39 +477,40 @@ if(validfullname && validemail && validcity && validstate && validstate && valid
                   </center>
                 </tbody>
               </table> 
+              <h1><p>Thank you for your order!</p></h1>
         </body>`
 
 
     // Set up mail server. Only will work on UH Network due to security restrictions
       var transporter = nodemailer.createTransport({
-        host: "gmail",
-        port: 25,
-        secure: false, // use TLS
-        tls: {
-          // do not fail on invalid certs
-          rejectUnauthorized: false
+        service: 'gmail',
+        host: "smtp.gmail.com",
+        port: 465,
+        auth:{
+            user:'cliffordproductstore42@gmail.com',
+            pass:'productstore#24'
         }
       });
     
-     
       var mailOptions = {
-        from: 'clifford.store@gmail.com',
-        to: email,
-        subject: 'Cliffords Store Customer Invoice',
-        html: invoice_str
+        from:'cliffordproductstore42@gmail.com',
+        to:email,
+        subject:'Cliffords Store Customer Invoice',
+        html:invoice_str
       };
     
       transporter.sendMail(mailOptions, function(error, info){
         if (error) {
-          errormsg= '<br>There was an error and your invoice could not be emailed :(';
+            console.log(error)
+          invoice_str += 'Error in sending email';
         } else {
-          errormsg= `<br>Your invoice was mailed to ${email}`;
+          invoice_str += `A copy of the invoice has been sent to the email address : ${email}`;
         }
-        
-        return response.send(emailmsg);
+        return response.send(invoice_str);
       });
-
+    }
 });
+
 
 
 
@@ -518,7 +522,6 @@ Expression Template: used from Assignment 2 is as follows each function holds a 
 [0-9] represents all numbers
 {0,5} represents requirements which states at at least 0 characters to no more than 5 characters
 */
-
 
 function validateUsername(user) {
     const re = /^[a-zA-Z0-9]{5,15}$/;

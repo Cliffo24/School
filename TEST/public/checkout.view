@@ -82,10 +82,6 @@ src="./functions.js"
       </form>
     </div>
   </div>
-  <div class="col-25">
-    <div class="container">
-      <script>
-      </script>
     </div>
   </div>
 </div>

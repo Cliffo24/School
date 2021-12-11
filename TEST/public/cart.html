@@ -23,7 +23,7 @@
      
   });
   console.log(products_data)
-  //to hold items within the cart taken from assignment 3 example 
+  //session cart to hold items within the cart taken from assignment 3 example 
   loadJSON('get_cart', function (response) {
       // Parsing JSON string into object
       shopping_cart = JSON.parse(response);
@@ -93,7 +93,7 @@
 
  
  <script>
-//views products and the quantities of products that are within the cart which is above the modify cart section
+//section is to write the products to view only as changing the quantities array will have different quantities in view and modifying cart. the functionality itself will write products and the quantities of products that are within the cart
   for (products_key in shopping_cart) {
       for (i = 0; i < products_data[products_key].length; i++) {
         if (shopping_cart[products_key][i] != undefined && shopping_cart[products_key][i] != 0) {
@@ -109,7 +109,7 @@
 
       }
   }
-//if the cart has quantites it will write a purchase form in products
+//if the cart has quantites it will write a purchase form in products to redirect to /checkout and if it doesnt, it will write no products
   if (cart_values) {
               document.write(`
               <center><h3>Click Purchase to Checkout</h3></center>
@@ -127,6 +127,7 @@
 
 <script>
 //taken from assignment 3 example and modified 
+//function is to mirror the cart display and use it as a modify cart page if you want to change the quantities that is displayed
 //takes the products inside the shopping cart to verify if there are products within the cart and if there are it will write the modify page within the cart so it will allow users to modify
 var order_str = '';
 for (products_key in shopping_cart) {
