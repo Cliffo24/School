@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="./checkout.css">
 <script>
 src="./functions.js"
+<--Template taken from W3schools-->
 </script>
 </head>
 <body>
