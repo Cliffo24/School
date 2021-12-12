@@ -46,6 +46,7 @@
     <div class="navbar-right">
       
       <script>
+//using cookie for personalization
         var username = getCookie(`username`)
           if(username == ""){
           document.write(`
@@ -57,7 +58,9 @@
             `)
           }
       </script>
+      
       <script>
+//recall /get cart function with calculates the cart total 
     document.write(`<a href="./cart.html">Cart Total: ${total} </a> `)
       </script>
    

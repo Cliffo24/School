@@ -28,7 +28,6 @@
       // Parsing JSON string into object
       shopping_cart = JSON.parse(response);
       cart = response
-      
       for (pk in shopping_cart) {
           total += shopping_cart[pk].reduce((a, b) => a + b);
       }
@@ -107,13 +106,13 @@
                 <center><INPUT TYPE="number" min=0 value="${shopping_cart[products_key][i]}"readonly></center>
                 </div>
                   `)
-              var cart_values = true
+              var cartvalues = true
           }
 
       }
   }
 //if the cart has quantites it will write a purchase form in products to redirect to /checkout and if it doesnt, it will write no products
-  if (cart_values) {
+  if (cartvalues) {
               document.write(`
               <center><h3>Click Purchase to Checkout</h3></center>
               <form action="/checkout" name="checkout" method="POST">
