@@ -509,8 +509,9 @@ if(validfullname && validemail && validcity && validstate && validstate && valid
         } else {
           invoice_str += `A copy of the invoice has been sent to the email address : ${email}`
         }
-        return response.send(invoice_str);
         request.session.destroy();
+        return response.send(invoice_str);
+        
       });
     }
 });
