@@ -66,7 +66,10 @@
             }
       </script>
   
-    <a href="./cart.html">Cart</a>
+     <script>
+    document.write(`<a href="./cart.html">Cart Total: ${total} </a> `)
+      </script>
+   
     </div> 
     <div class="dropdown">
       <button class="dropbtn">Products
@@ -120,7 +123,7 @@
   }
   else {
       document.write(`
-      You have no products in your cart
+      There are no products in your cart
       `)
   }
 </script>

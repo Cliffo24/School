@@ -23,6 +23,9 @@
       // Parsing JSON string into object
       shopping_cart = JSON.parse(response);
       cart = response
+      for (pk in shopping_cart) {
+        total += shopping_cart[pk].reduce((a, b) => a + b);
+    }
       
   });
   loadJSON('user_data', function (response) {
@@ -54,8 +57,10 @@
             `)
           }
       </script>
-  
-    <a href="./cart.html">Cart</a>
+      <script>
+    document.write(`<a href="./cart.html">Cart Total: ${total} </a> `)
+      </script>
+   
     </div> 
     <div class="dropdown">
       <button class="dropbtn">Products

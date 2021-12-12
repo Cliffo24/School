@@ -104,6 +104,9 @@ app.get("/modifycart", function (request,response){
 app.post("/get_cart", function (request, response){
     shopping_cart = (request.session.cart)
     response.send(shopping_cart)
+    for (pk in shopping_cart) {
+        total = shopping_cart[pk].reduce((a, b) => a + b);
+    }
 });
 
 
@@ -393,7 +396,7 @@ if(email != user_data[username]['email']){
     }else{
         var emailmatch=true
 }
-    console.log("CREDIT CARD CREDENTIALS VALID AND MATCH OUR RECORDS")
+    console.log("CREDIT CARD CREDENTIALS VALID AND EMAIL MATCH OUR RECORDS")
 //valid 
 if(validfullname && validemail && validcity && validstate && validstate && validzip && validcardname && validexpmonth && validexpyear && validcardnumber && address && emailmatch){
   //takes the content within invoice.view posted here into a string to send to customer email
@@ -477,7 +480,8 @@ if(validfullname && validemail && validcity && validstate && validstate && valid
                   </center>
                 </tbody>
               </table> 
-              <h1><p>Thank you for your order!</p></h1>
+              <h1><p>Thank you ${full_name} for your order!</p></h1>
+                    <p><a href="./products_display.html">Home Page</a></p>
         </body>`
 
 
@@ -504,9 +508,10 @@ if(validfullname && validemail && validcity && validstate && validstate && valid
             console.log(error)
           invoice_str += 'Error in sending email';
         } else {
-          invoice_str += `A copy of the invoice has been sent to the email address : ${email}`;
+          invoice_str += `A copy of the invoice has been sent to the email address : ${email}`
         }
         return response.send(invoice_str);
+        request.session.destroy();
       });
     }
 });
