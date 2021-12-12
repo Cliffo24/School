@@ -14,7 +14,6 @@ function loadJSON(service, callback) {
   }
   
   // This function makes a navigation bar from a products_data object. taken from Assignment 3 example
-  
   function nav_bar(this_product_key, products_data) {
     // This makes a navigation bar to other product pages
     for (products_key in products_data) {

@@ -14,6 +14,7 @@
 
 <script>
   //load json files files taken from Assignment 3 example and modified
+  //gets product data
   var products_data;
   var total = 0;
   loadJSON("get_products_data", function (response) {
@@ -32,7 +33,7 @@
           total += shopping_cart[pk].reduce((a, b) => a + b);
       }
   });
-  //holds user data takenf rom assignment 3 example
+  //loads user data taken from assignment 3 example
   loadJSON('user_data', function (response) {
       // Parsing JSON string into object
       user_reg_data = JSON.parse(response);
@@ -66,6 +67,7 @@
       </script>
   
      <script>
+//recall /get cart function with calculates the cart total 
     document.write(`<a href="./cart.html">Cart Total: ${total} </a> `)
       </script>
    

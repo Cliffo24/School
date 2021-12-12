@@ -27,9 +27,8 @@ var shopping_cart = [];
     app.use(myParser.urlencoded({ extended: true }));
 //taken from assignment 3
     app.use(session({secret: `Mykey`, resave: true, saveUninitialized: true}))
-//global variable to recall back the function to display the array after running through validation because this wasn't running I made another global variable at the bottom
-    var stringified ={}
 //Route to handle any request; also calls next
+//holds the session for cart
 app.all('*', function (request, response, next) {
     console.log (request.method + ' to path ' + request.path);
     next();
@@ -307,6 +306,7 @@ app.post("/invoice", function (request, response) {
     console.log(username)
 
 //Validation for credit card information using the same format as my registration validation format
+//used email to validate its the same email used for registration for account
 if(!validatefullname(full_name)){
     response.send(`<script>
     alert("Fullname: ${full_name} Must between 0 and 30 characters following the prompt Last Name, First Name"); 
@@ -399,7 +399,7 @@ if(email != user_data[username]['email']){
     console.log("CREDIT CARD CREDENTIALS VALID AND EMAIL MATCH OUR RECORDS")
 //valid 
 if(validfullname && validemail && validcity && validstate && validstate && validzip && validcardname && validexpmonth && validexpyear && validcardnumber && address && emailmatch){
-  //takes the content within invoice.view posted here into a string to send to customer email
+  //uses a string to post as a invoice and also sends a copy to customer email
     var invoice_str= `
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -484,8 +484,7 @@ if(validfullname && validemail && validcity && validstate && validstate && valid
                     <p><a href="./products_display.html">Home Page</a></p>
         </body>`
 
-
-    // Set up mail server. Only will work on UH Network due to security restrictions
+//taken from Assignment 3 example and modified
       var transporter = nodemailer.createTransport({
         service: 'gmail',
         host: "smtp.gmail.com",
@@ -647,4 +646,4 @@ if (subtotal <= 1000) {
 
 
 app.use(express.static('./public'));
-app.listen(8080, () => console.log(`listening on port 8080`)); // note the use of an anonymous function here
+app.listen(8080, () => console.log(`listening on port 8080`));
